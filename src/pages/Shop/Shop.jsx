@@ -1,5 +1,6 @@
 import React from "react";
 import Header from "../../components/Header/Header";
+import Footer from "../../components/Footer/Footer";
 
 const products = [
   {
@@ -22,6 +23,30 @@ const products = [
   },
   {
     id: 4,
+    name: "Velvet Night Dress",
+    price: "$75.50",
+    image: "https://source.unsplash.com/featured/?dress",
+  },
+  {
+    id: 5,
+    name: "Dreamy Denim Jacket",
+    price: "$59.99",
+    image: "https://source.unsplash.com/featured/?jacket",
+  },
+  {
+    id: 6,
+    name: "Whisper White Sneakers",
+    price: "$89.00",
+    image: "https://source.unsplash.com/featured/?sneakers",
+  },
+  {
+    id: 7,
+    name: "Cloud Cotton Tee",
+    price: "$29.99",
+    image: "https://source.unsplash.com/featured/?tshirt",
+  },
+  {
+    id: 8,
     name: "Velvet Night Dress",
     price: "$75.50",
     image: "https://source.unsplash.com/featured/?dress",
@@ -72,6 +97,7 @@ const Shop = () => {
         </div>
       </div>
     </div>
+    <Footer/>
     </>
   );
 };

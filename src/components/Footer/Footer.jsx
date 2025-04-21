@@ -6,7 +6,7 @@ const Footer = () => {
   return (
     <footer className="bg-[#816F68] text-white py-12">
       <div className="max-w-7xl mx-auto px-6 grid grid-cols-1 md:grid-cols-4 gap-12">
-        {/* Branding Section */}
+        {/* Branding div */}
         <div className="text-center md:text-left col-span-1">
           <h2 className="text-3xl font-bold text-[#C9C9EE] mb-3">Panda Shops</h2>
           <p className="text-lg text-white/80">
@@ -26,7 +26,7 @@ const Footer = () => {
           </div>
         </div>
 
-        {/* Social Media Section */}
+        {/* Social Media div */}
         <div className="text-center md:text-left">
           <h3 className="text-xl font-semibold text-[#C9C9EE] mb-4">Follow Us</h3>
           <div className="flex flex-col items-center md:items-start gap-4 text-lg">
@@ -60,7 +60,7 @@ const Footer = () => {
           </div>
         </div>
 
-        {/* Contact Info Section */}
+        {/* Contact Info div */}
         <div className="text-center md:text-left">
           <h3 className="text-xl font-semibold text-[#C9C9EE] mb-4">Contact Us</h3>
           <div className="flex flex-col gap-2 text-white/80">

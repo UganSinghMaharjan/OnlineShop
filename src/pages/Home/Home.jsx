@@ -12,7 +12,7 @@ const Home = () => {
       <Header />
       <Carousel />
 
-      <section className="flex flex-col justify-center items-center text-center min-h-screen bg-gradient-to-b from-[#816F68] to-[#BAABBD] px-3 text-white">
+      <div className="flex flex-col justify-center items-center text-center min-h-screen bg-gradient-to-b from-[#816F68] to-[#BAABBD] px-3 text-white">
         <h1 className="text-5xl font-bold mb-6 animate-glow text-white">
           Welcome to Panda Shops!
         </h1>
@@ -28,13 +28,13 @@ const Home = () => {
         <div className="font-bold border rounded-2xl px-4 py-2 mt-6 bg-[#697565] text-black hover:bg-[#ECDFCC] transition duration-300">
           <NavLink to="/shop">Shop Now!!</NavLink>
         </div>
-      </section>
+      </div>
 
-      <section className="bg-[#F6F2EF]  ">
-        <h2 className="text-3xl font-bold text-center text-[#003249] mb-8">Featured Collections</h2>
+      <div className="bg-[#9F838C]  ">
+        <h2 className="text-5xl font-bold text-center text-[#003249]">Featured Collections</h2>
         <ItemCard />
         <AboutUs/>
-      </section>
+      </div>
 
     <Footer/>
 

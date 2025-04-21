@@ -1,18 +1,33 @@
 import React from "react";
-import logo from "../../assets/images/logo.png"
+import logo from "../../assets/images/logo.png";
 import { NavLink } from "react-router-dom";
 import { FiMenu } from "react-icons/fi";
-import { FaHome } from "react-icons/fa";
+import { FaHome, FaCartArrowDown, FaInfo } from "react-icons/fa";
 import { FaBasketShopping } from "react-icons/fa6";
-import { FaCartArrowDown } from "react-icons/fa";
 import { IoMdContacts } from "react-icons/io";
-import { FaInfo } from "react-icons/fa";
+import { Dropdown, Button, Space } from "antd";
+import { DownOutlined } from "@ant-design/icons";
 
 const Header = () => {
+  const menuItems = [
+    {
+      key: '1',
+      label: 'Profile',
+    },
+    {
+      key: '2',
+      label: 'Settings',
+    },
+    {
+      key: '3',
+      label: 'Logout',
+    },
+  ];
+
   return (
     <div className="w-full bg-gradient-to-r from-[#816F68] to-[#C9C9EE] shadow-md z-50">
-
       <div className="flex items-center justify-between px-6 py-4 max-w-7xl mx-auto relative">
+        
         {/* Logo on the left */}
         <div className="flex-shrink-0">
           <NavLink to="/home">
@@ -24,10 +39,10 @@ const Header = () => {
           </NavLink>
         </div>
 
-        {/* Navigation - absolutely centered */}
+        {/* Navigation - centered */}
         <div className="absolute left-1/2 transform -translate-x-1/2">
           <ul className="flex space-x-10 text-lg font-medium text-white">
-          <li>
+            <li>
               <NavLink
                 to="/home"
                 className="flex items-center space-x-2 hover:text-red-200 transition-colors duration-300"
@@ -56,7 +71,7 @@ const Header = () => {
             </li>
             <li>
               <NavLink
-                to="/contact-us"
+                to="/contact"
                 className="flex items-center space-x-2 hover:text-red-200 transition-colors duration-300"
               >
                 <IoMdContacts className="text-xl" />
@@ -65,7 +80,7 @@ const Header = () => {
             </li>
             <li>
               <NavLink
-                to="/about-us"
+                to="/Mabout"
                 className="flex items-center space-x-2 hover:text-red-200 transition-colors duration-300"
               >
                 <FaInfo className="text-xl" />
@@ -75,11 +90,20 @@ const Header = () => {
           </ul>
         </div>
 
-        {/* Hamburger on the right */}
-        <div className="flex-shrink-0">
-          <button className="text-3xl text-white hover:text-red-200">
-            <FiMenu />
-          </button>
+        {/* Dropdown Menu on the right */}
+        <div className="flex-shrink-">
+          <Dropdown
+            menu={{ items: menuItems }}
+            trigger={['click']}
+            placement="bottomRight"
+          >
+            <Button className="bg-blue-500 text-white hover:bg-blue-600">
+              <Space>
+                <FiMenu className="text-xl" />
+                <DownOutlined />
+              </Space>
+            </Button>
+          </Dropdown>
         </div>
       </div>
     </div>
