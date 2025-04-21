@@ -1,10 +1,11 @@
 import React, { useState, useEffect } from "react";
-import img from "../../assets/images/wall3.jpg";
-import img2 from "../../assets/images/bc.jpg";
-import img3 from "../../assets/images/bc2.jpg";
+import img from "../../assets/images/logo.png"
+import img2 from "../../assets/images/wall3.jpg";
+import img3 from "../../assets/images/bc.jpg";
+import img4 from "../../assets/images/bc2.jpg";
 import { FaArrowLeft, FaArrowRight } from "react-icons/fa";
 
-const images = [img, img2, img3];
+const images = [img, img2, img3,img4];
 
 const Carousel = () => {
   const [current, setCurrent] = useState(0);
@@ -22,7 +23,7 @@ const Carousel = () => {
 
   return (
     <div className="relative w-full h-72 md:h-96 overflow-hidden shadow-lg">
-      {images.map((img, index) => (
+      {images.map((imgSrc, index) => (
         <div
           key={index}
           className={`absolute inset-0 transition-opacity duration-1000 ease-in-out ${
@@ -30,7 +31,7 @@ const Carousel = () => {
           }`}
         >
           <img
-            src={img}
+            src={imgSrc}
             alt={`Slide ${index}`}
             className="w-full h-full object-cover"
           />

@@ -1,5 +1,5 @@
 import React from "react";
-import bc from "../../assets/images/bc.jpg"
+import logo from "../../assets/images/logo.png"
 import { NavLink } from "react-router-dom";
 import { FiMenu } from "react-icons/fi";
 import { FaHome } from "react-icons/fa";
@@ -10,13 +10,14 @@ import { FaInfo } from "react-icons/fa";
 
 const Header = () => {
   return (
-    <div className="w-full bg-[#181C14] shadow-md z-50">
+    <div className="w-full bg-gradient-to-r from-[#816F68] to-[#C9C9EE] shadow-md z-50">
+
       <div className="flex items-center justify-between px-6 py-4 max-w-7xl mx-auto relative">
         {/* Logo on the left */}
         <div className="flex-shrink-0">
           <NavLink to="/home">
             <img
-              src={bc}
+              src={logo}
               alt="onlineshop Logo"
               className="h-12 rounded-full"
             />
@@ -37,7 +38,7 @@ const Header = () => {
             </li>
             <li>
               <NavLink
-                to="/item"
+                to="/shop"
                 className="flex items-center space-x-2 hover:text-red-200 transition-colors duration-300"
               >
                 <FaBasketShopping className="text-xl" />
