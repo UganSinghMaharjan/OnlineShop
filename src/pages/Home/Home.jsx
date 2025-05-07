@@ -14,7 +14,7 @@ const Home = () => {
 
       <div className="flex flex-col justify-center items-center text-center min-h-screen bg-gradient-to-b from-[#816F68] to-[#BAABBD] px-3 text-white">
         <h1 className="text-5xl font-bold mb-6 animate-glow text-white">
-          Welcome to Panda Shops!
+          Welcome to PandaWagon s!
         </h1>
 
         <h2 className="text-2xl max-w-2xl mb-4">

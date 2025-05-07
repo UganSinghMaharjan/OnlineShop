@@ -22,7 +22,7 @@ const Carousel = () => {
   const prevSlide = () => setCurrent((current - 1 + length) % length);
 
   return (
-    <div className="relative w-full h-72 md:h-96 overflow-hidden shadow-lg">
+    <div className="relative w-full h-90 md:h-170 overflow-hidden shadow-lg">
       {images.map((imgSrc, index) => (
         <div
           key={index}

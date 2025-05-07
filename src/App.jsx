@@ -14,6 +14,8 @@ import Footer from './components/Footer/Footer';
 import MaboutUs from './components/MaboutUs/MaboutUs';
 import ContactUs from './components/ContactUs/ContactUs';
 import Profile from './pages/Profile/Profile';
+import Cart from './pages/Cart/Cart';
+import Admin from './components/Admin/Admin';
 
 
 
@@ -29,8 +31,10 @@ function App() {
         <Route path='/signin' element={<SignIn/>}/>
         <Route path='/home' element={<Home/>}/>
         <Route path='/shop' element={<Shop/>}/>
+        <Route path='/cart' element={<Cart/>}/>
         <Route path='/Mabout' element={<MaboutUs/>}/>
         <Route path='/contact' element={<ContactUs/>}/>
+        <Route path='/admin' element={<Admin/>}/>
         
 
         <Route path='/profile'element={<Profile/>}/>

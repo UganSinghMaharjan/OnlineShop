@@ -62,7 +62,7 @@ const Header = () => {
             </li>
             <li>
               <NavLink
-                to="/user"
+                to="/cart"
                 className="flex items-center space-x-2 hover:text-red-200 transition-colors duration-300"
               >
                 <FaCartArrowDown className="text-xl" />

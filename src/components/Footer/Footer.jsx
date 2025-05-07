@@ -8,7 +8,7 @@ const Footer = () => {
       <div className="max-w-7xl mx-auto px-6 grid grid-cols-1 md:grid-cols-4 gap-12">
         {/* Branding div */}
         <div className="text-center md:text-left col-span-1">
-          <h2 className="text-3xl font-bold text-[#C9C9EE] mb-3">Panda Shops</h2>
+          <h2 className="text-3xl font-bold text-[#C9C9EE] mb-3">PandaWagon </h2>
           <p className="text-lg text-white/80">
             Your trusted online marketplace for all things you love. Making shopping easy, joyful, and uniquely you.
           </p>
@@ -73,9 +73,9 @@ const Footer = () => {
 
       {/* Footer Bottom Text */}
       <div className="mt-12 text-center text-sm text-white/60">
-        <p>Designed and built by the Panda Shops team. Thank you for shopping with us!</p>
+        <p>Designed and built by the PandaWagon s team. Thank you for shopping with us!</p>
         <p className="mt-4 text-sm text-white/60">
-            &copy; {new Date().getFullYear()} Panda Shops. All rights reserved.
+            &copy; {new Date().getFullYear()} PandaWagon s. All rights reserved.
           </p>
       </div>
     </footer>
