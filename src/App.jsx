@@ -16,6 +16,11 @@ import ContactUs from './components/ContactUs/ContactUs';
 import Profile from './pages/Profile/Profile';
 import Cart from './pages/Cart/Cart';
 import Admin from './components/Admin/Admin';
+import Dashboard from './pages/Dashboard/Dashboard';
+import CustomHeader from './components/CustomHeader/CustomHeader';
+import AddProducts from './pages/AddProducts/AddProducts';
+import User from './pages/User/User';
+import Settings from './pages/Settings/Settings';
 
 
 
@@ -35,6 +40,11 @@ function App() {
         <Route path='/Mabout' element={<MaboutUs/>}/>
         <Route path='/contact' element={<ContactUs/>}/>
         <Route path='/admin' element={<Admin/>}/>
+        <Route path='/dashboard' element={<Dashboard/>}/>
+        <Route path='/custom' element={<CustomHeader/>}/>
+        <Route path='addproducts' element={<AddProducts/>}/>
+        <Route path='user' element={<User/>}/>
+        <Route path='settings' element={<Settings/>}/>
         
 
         <Route path='/profile'element={<Profile/>}/>

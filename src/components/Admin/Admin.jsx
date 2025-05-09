@@ -1,5 +1,5 @@
-import React from "react";
-import { Layout, Menu, Typography, Card, Row, Col } from "antd";
+import React, { useState } from "react";
+import { Layout, Menu } from "antd";
 import {
   DashboardOutlined,
   UserOutlined,
@@ -7,15 +7,30 @@ import {
   AppstoreAddOutlined,
   LogoutOutlined,
 } from "@ant-design/icons";
+import Dashboard from "../../pages/Dashboard/Dashboard";
+import CustomHeader from "../CustomHeader/CustomHeader";
+import AddProducts from "../../pages/AddProducts/AddProducts";
+import User from "../../pages/User/User";
+import Settings from "../../pages/Settings/Settings";
 
-const { Header, Content, Sider } = Layout;
-const { Title } = Typography;
+
+
+
+const { Header: AntHeader, Content, Sider } = Layout;
+
+const siderWidth = 220;
 
 const Admin = () => {
+  const [selectedKey, setSelectedKey] = useState("1");
+
+  const handleMenuClick = (e) => {
+    setSelectedKey(e.key);
+  };
+
   return (
     <Layout style={{ minHeight: "100vh" }}>
       <Sider
-        width={250}
+        width={siderWidth}
         breakpoint="lg"
         collapsedWidth="0"
         style={{ backgroundColor: "#9F838C" }}
@@ -34,6 +49,7 @@ const Admin = () => {
           theme="dark"
           mode="inline"
           defaultSelectedKeys={["1"]}
+          onClick={handleMenuClick}
           style={{ backgroundColor: "#9F838C" }}
         >
           <Menu.Item key="1" icon={<DashboardOutlined />}>
@@ -54,34 +70,22 @@ const Admin = () => {
         </Menu>
       </Sider>
 
-      <Layout>
-        <Header style={{ background: "#fff", padding: 0, paddingLeft: 24 }}>
-          <Title level={3} style={{ margin: 0 }}>
-            Dashboard Overview
-          </Title>
-        </Header>
+      <Layout
+        style={{
+          marginLeft: 0,
+        }}
+        className="bg-[#f7f7f7] overflow-x-hidden"
+      >
+         <AntHeader style={{ background: "#fff", padding: 0 }}>
+          <CustomHeader selectedKey={selectedKey} handleMenuClick={setSelectedKey} />
+        </AntHeader>
 
-        <Content style={{ margin: "24px 16px 0" }}>
-          <div style={{ padding: 24, minHeight: 360, background: "#fff" }}>
-            <Row gutter={16}>
-              <Col span={8}>
-                <Card title="Users" bordered={false}>
-                  1,245
-                </Card>
-              </Col>
-              <Col span={8}>
-                <Card title="Orders" bordered={false}>
-                  312
-                </Card>
-              </Col>
-              <Col span={8}>
-                <Card title="Revenue" bordered={false}>
-                  $12,430
-                </Card>
-              </Col>
-            </Row>
-          </div>
-        </Content>
+        <Content className="min-h-screen min-w-screen bg-[#f7f7f7] flex rounded-2xl">
+  {selectedKey === "1" && <Dashboard />}
+  {selectedKey === "2" && <User/>}
+  {selectedKey === "3" && <AddProducts/>}
+  {selectedKey === "4" && <Settings/>}
+</Content>
       </Layout>
     </Layout>
   );
