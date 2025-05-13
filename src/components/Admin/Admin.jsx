@@ -6,18 +6,17 @@ import {
   SettingOutlined,
   AppstoreAddOutlined,
   LogoutOutlined,
+  EditOutlined,
 } from "@ant-design/icons";
+
 import Dashboard from "../../pages/Dashboard/Dashboard";
 import CustomHeader from "../CustomHeader/CustomHeader";
 import AddProducts from "../../pages/AddProducts/AddProducts";
 import User from "../../pages/User/User";
 import Settings from "../../pages/Settings/Settings";
-
-
-
+import EditProductList from "../../pages/EditProductList/EditProductList";
 
 const { Header: AntHeader, Content, Sider } = Layout;
-
 const siderWidth = 220;
 
 const Admin = () => {
@@ -29,6 +28,7 @@ const Admin = () => {
 
   return (
     <Layout style={{ minHeight: "100vh" }}>
+      {/* Sidebar Navigation */}
       <Sider
         width={siderWidth}
         breakpoint="lg"
@@ -61,31 +61,36 @@ const Admin = () => {
           <Menu.Item key="3" icon={<AppstoreAddOutlined />}>
             Add Products
           </Menu.Item>
-          <Menu.Item key="4" icon={<SettingOutlined />}>
+          <Menu.Item key="4" icon={<EditOutlined />}>
+            Edit Products List
+          </Menu.Item>
+          <Menu.Item key="5" icon={<SettingOutlined />}>
             Settings
           </Menu.Item>
-          <Menu.Item key="5" icon={<LogoutOutlined />}>
+          <Menu.Item key="6" icon={<LogoutOutlined />}>
             Log Out
           </Menu.Item>
         </Menu>
       </Sider>
 
-      <Layout
-        style={{
-          marginLeft: 0,
-        }}
-        className="bg-[#f7f7f7] overflow-x-hidden"
-      >
-         <AntHeader style={{ background: "#fff", padding: 0 }}>
+      {/* Main Content Layout */}
+      <Layout className="bg-[#f7f7f7] overflow-x-hidden">
+        <AntHeader style={{ background: "#fff", padding: 0 }}>
           <CustomHeader selectedKey={selectedKey} handleMenuClick={setSelectedKey} />
         </AntHeader>
 
-        <Content className="min-h-screen min-w-screen bg-[#f7f7f7] flex rounded-2xl">
-  {selectedKey === "1" && <Dashboard />}
-  {selectedKey === "2" && <User/>}
-  {selectedKey === "3" && <AddProducts/>}
-  {selectedKey === "4" && <Settings/>}
-</Content>
+        <Content className="min-h-screen min-w-screen bg-[#f7f7f7] flex rounded-2xl p-6">
+          {selectedKey === "1" && <Dashboard />}
+          {selectedKey === "2" && <User />}
+          {selectedKey === "3" && <AddProducts />}
+          {selectedKey === "4" && <EditProductList />}
+          {selectedKey === "5" && <Settings />}
+          {selectedKey === "6" && (
+            <div className="w-full h-full flex items-center justify-center text-red-500 text-xl font-semibold">
+              Logging out...
+            </div>
+          )}
+        </Content>
       </Layout>
     </Layout>
   );

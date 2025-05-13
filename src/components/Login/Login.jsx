@@ -1,8 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, NavLink } from 'react-router-dom';
 import { toast } from 'react-toastify';
-import { NavLink } from 'react-router-dom';
 import loginbc from '../../assets/images/loginbc.jpg';
 import { userLogin } from '../../redux/authAction/authAction';
 import { setClearError } from '../../redux/features/authSlice/authSlice';
@@ -29,9 +28,19 @@ const Login = () => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
+
+    // 🔐 Admin login condition
+    if (email === 'Admin@gmail.com' && password === 'Admin@123') {
+      toast.success('Welcome, Admin!');
+      navigate('/admin');
+      return; // 🚪 Exit early so we don’t dispatch userLogin
+    }
+
+    // 👥 Regular user login
     dispatch(userLogin({ loginValue, toast, navigate }));
   };
 
+  // Show error if login fails
   useEffect(() => {
     if (error) {
       toast.error(error);

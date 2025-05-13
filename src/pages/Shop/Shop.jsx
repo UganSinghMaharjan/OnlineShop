@@ -1,117 +1,50 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
+import axios from "axios";
 import Header from "../../components/Header/Header";
 import Footer from "../../components/Footer/Footer";
 
-const products = [
-  {
-    id: 1,
-    name: "Dreamy Denim Jacket",
-    price: "$59.99",
-    category: "Wear",
-    image: "https://source.unsplash.com/featured/?jacket",
-  },
-  {
-    id: 2,
-    name: "Whisper White Sneakers",
-    price: "$89.00",
-    category: "Shoes",
-    image: "https://source.unsplash.com/featured/?sneakers",
-  },
-  {
-    id: 3,
-    name: "Cloud Cotton Tee",
-    price: "$29.99",
-    category: "Wear",
-    image: "https://source.unsplash.com/featured/?tshirt",
-  },
-  {
-    id: 4,
-    name: "Velvet Night Dress",
-    price: "$75.50",
-    category: "Wear",
-    image: "https://source.unsplash.com/featured/?dress",
-  },
-  {
-    id: 5,
-    name: "Electric Toothbrush",
-    price: "$39.99",
-    category: "Electronics",
-    image: "https://source.unsplash.com/featured/?electronics",
-  },
-  {
-    id: 6,
-    name: "Smart LED Bulb",
-    price: "$19.99",
-    category: "Electronics",
-    image: "https://source.unsplash.com/featured/?smartbulb",
-  },
-  {
-    id: 7,
-    name: "Running Shoes",
-    price: "$99.99",
-    category: "Shoes",
-    image: "https://source.unsplash.com/featured/?runningshoes",
-  },
-  {
-    id: 8,
-    name: "Basic Hoodie",
-    price: "$49.99",
-    category: "Wear",
-    image: "https://source.unsplash.com/featured/?hoodie",
-  },
-  {
-    id: 9,
-    name: "Gold Hoop Earrings",
-    price: "$24.99",
-    category: "Accessories",
-    image: "https://source.unsplash.com/featured/?earrings",
-  },
-  {
-    id: 10,
-    name: "Silk Scarf",
-    price: "$35.00",
-    category: "Accessories",
-    image: "https://source.unsplash.com/featured/?scarf",
-  },
-  {
-    id: 11,
-    name: "Face Serum GlowUp",
-    price: "$27.50",
-    category: "Beauty",
-    image: "https://source.unsplash.com/featured/?skincare",
-  },
-  {
-    id: 12,
-    name: "Aromatic Candle Set",
-    price: "$22.00",
-    category: "Home",
-    image: "https://source.unsplash.com/featured/?candles",
-  },
-];
-
 const Shop = () => {
+  const [products, setProducts] = useState([]);
   const [searchTerm, setSearchTerm] = useState("");
   const [sortOrder, setSortOrder] = useState("");
   const [categoryFilter, setCategoryFilter] = useState("");
   const [minPrice, setMinPrice] = useState("");
   const [maxPrice, setMaxPrice] = useState("");
 
+  useEffect(() => {
+    const fetchProducts = async () => {
+      try {
+        const res = await axios.get("http://localhost:8000/api/v1/all/products");
+        setProducts(res.data.data);
+      } catch (error) {
+        console.error("Failed to fetch products:", error);
+      }
+    };
+
+    fetchProducts();
+  }, []);
+
   const filteredProducts = products
-    .filter((product) =>
-      product.name.toLowerCase().includes(searchTerm.toLowerCase())
-    )
-    .filter((product) =>
-      categoryFilter ? product.category === categoryFilter : true
-    )
     .filter((product) => {
-      const price = parseFloat(product.price.replace("$", ""));
+      // Search by name
+      if (searchTerm.trim() === "") return true;
+      return product.productName.toLowerCase().includes(searchTerm.toLowerCase());
+    })
+    .filter((product) => {
+      // Filter by category
+      if (categoryFilter === "") return true;
+      return product.category.toLowerCase() === categoryFilter.toLowerCase();
+    })
+    .filter((product) => {
+      // Filter by price range
+      const price = parseFloat(product.productPrice);
       const min = parseFloat(minPrice) || 0;
       const max = parseFloat(maxPrice) || Infinity;
       return price >= min && price <= max;
     })
     .sort((a, b) => {
-      const priceA = parseFloat(a.price.replace("$", ""));
-      const priceB = parseFloat(b.price.replace("$", ""));
+      const priceA = parseFloat(a.productPrice);
+      const priceB = parseFloat(b.productPrice);
       if (sortOrder === "low-to-high") return priceA - priceB;
       if (sortOrder === "high-to-low") return priceB - priceA;
       return 0;
@@ -122,20 +55,18 @@ const Shop = () => {
       <div className="bg-gray-50 text-gray-800 min-h-screen">
         <Header />
 
-        {/* Hero Banner */}
         <div className="w-full h-[300px] bg-gradient-to-r from-pink-200 via-purple-200 to-indigo-200 flex items-center justify-center shadow-md">
           <h1 className="text-5xl font-bold text-gray-900 drop-shadow-md">
             Explore the Collection ✨
           </h1>
         </div>
 
-        {/* Product Grid */}
         <div className="max-w-6xl mx-auto py-12 px-6">
           <h2 className="text-3xl font-semibold mb-8 text-center">
             Featured Products
           </h2>
 
-          {/* Search and Sort Controls */}
+          {/* Filters */}
           <div className="mb-8 flex flex-col sm:flex-row justify-center items-center gap-4 flex-wrap">
             <input
               type="text"
@@ -167,7 +98,6 @@ const Shop = () => {
               <option value="Home">Home</option>
             </select>
 
-            {/* Price Pool Filter */}
             <input
               type="number"
               placeholder="Min Price"
@@ -184,28 +114,33 @@ const Shop = () => {
             />
           </div>
 
+          {/* Product Cards */}
           <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-8">
-            {filteredProducts.map((product) => (
-              <div
-                key={product.id}
-                className="bg-white rounded-2xl shadow-lg overflow-hidden hover:shadow-xl transition duration-300 group"
-              >
-                <div className="w-full h-60 overflow-hidden">
-                  <img
-                    src={product.image}
-                    alt={product.name}
-                    className="w-full h-full object-cover transform group-hover:scale-105 transition duration-300"
-                  />
+            {filteredProducts.length > 0 ? (
+              filteredProducts.map((product) => (
+                <div
+                  key={product._id}
+                  className="bg-white rounded-2xl shadow-lg overflow-hidden hover:shadow-xl transition duration-300 group"
+                >
+                  <div className="w-full h-60 overflow-hidden">
+                    <img
+                      src={`http://localhost:8000/gallery/${product.productImage}`}
+                      alt={product.productName}
+                      className="w-full h-full object-cover transform group-hover:scale-105 transition duration-300"
+                    />
+                  </div>
+                  <div className="p-4">
+                    <h3 className="text-lg font-medium">{product.productName}</h3>
+                    <p className="text-gray-600">Rs.{product.productPrice}</p>
+                    <button className="mt-4 w-full py-2 rounded-xl bg-black text-white hover:bg-gray-800 transition font-semibold">
+                      Add to Cart
+                    </button>
+                  </div>
                 </div>
-                <div className="p-4">
-                  <h3 className="text-lg font-medium">{product.name}</h3>
-                  <p className="text-gray-600">{product.price}</p>
-                  <button className="mt-4 w-full py-2 rounded-xl bg-black text-white hover:bg-gray-800 transition font-semibold">
-                    Add to Cart
-                  </button>
-                </div>
-              </div>
-            ))}
+              ))
+            ) : (
+              <p className="col-span-full text-center text-gray-500 text-xl">No products found. Try adjusting your filters.</p>
+            )}
           </div>
         </div>
       </div>

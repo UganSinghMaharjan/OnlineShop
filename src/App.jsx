@@ -21,6 +21,7 @@ import CustomHeader from './components/CustomHeader/CustomHeader';
 import AddProducts from './pages/AddProducts/AddProducts';
 import User from './pages/User/User';
 import Settings from './pages/Settings/Settings';
+import EditProductList from './pages/EditProductList/EditProductList';
 
 
 
@@ -32,7 +33,7 @@ function App() {
     <Router>
       <ToastContainer />
       <Routes>
-        <Route path='/login' element={<Login/>}/>
+        <Route path='/' element={<Login/>}/>
         <Route path='/signin' element={<SignIn/>}/>
         <Route path='/home' element={<Home/>}/>
         <Route path='/shop' element={<Shop/>}/>
@@ -45,6 +46,7 @@ function App() {
         <Route path='addproducts' element={<AddProducts/>}/>
         <Route path='user' element={<User/>}/>
         <Route path='settings' element={<Settings/>}/>
+        <Route path='editProduct' element={<EditProductList/>}/>
         
 
         <Route path='/profile'element={<Profile/>}/>

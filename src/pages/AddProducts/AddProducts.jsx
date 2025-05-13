@@ -1,53 +1,81 @@
-import React, { useState } from 'react';
+import  { useState } from 'react';
+import axios from 'axios';
 
 const AddProducts = () => {
-  const [formData, setFormData] = useState({
-    name: '',
-    price: '',
-    quantity: '',
-    image: '',
+  const [productValue, setProductValue] = useState({
+    productName: '',
+    productPrice: '',
+    stock: '',
     brand: '',
     category: ''
   });
 
+  const [productImage, setProductImage] = useState(null);
+  const [productImagePreview, setProductImagePreview] = useState('');
+  const [isLoading, setIsLoading] = useState(false);
+  const [message, setMessage] = useState('');
+
+  const { productName, productPrice, stock, brand, category } = productValue;
+
   const handleChange = (e) => {
-    setFormData(prev => ({
+    setProductValue((prev) => ({
       ...prev,
-      [e.target.name]: e.target.value
+      [e.target.name]: e.target.value,
     }));
+  };
+
+  const handleFileChange = (e) => {
+    const file = e.target.files[0];
+    if (file) {
+      setProductImage(file);
+      const reader = new FileReader();
+      reader.readAsDataURL(file);
+      reader.onloadend = () => {
+        setProductImagePreview(reader.result);
+      };
+    }
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    // Send form data to backend API (using fetch or axios)
+    const formData = new FormData();
+    formData.append('productName', productName);
+    formData.append('productPrice', productPrice);
+    formData.append('stock', stock);
+    formData.append('brand', brand);
+    formData.append('category', category);
+    formData.append('productImage', productImage)
+
+    setIsLoading(true);
+    setMessage('');
+
     try {
-      const response = await fetch('/api/products', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(formData),
-      });
+      const res = await axios.post(
+        'http://localhost:8000/api/v1/add/product',
+        formData,
+        {
+          headers: {
+            'Content-Type': 'multipart/form-data',
+          },
+        }
+      );
 
-      if (!response.ok) {
-        throw new Error('Error adding product');
-      }
-
-      const result = await response.json();
-      console.log("Product added successfully:", result);
-      alert('Product added successfully!');
-      setFormData({
-        name: '',
-        price: '',
-        quantity: '',
-        image: '',
+      setMessage('🎉 Product added successfully!');
+      setProductValue({
+        productName: '',
+        productPrice: '',
+        stock: '',
         brand: '',
-        category: ''
+        category: '',
       });
+      setProductImage(null);
+      setProductImagePreview('');
     } catch (error) {
-      console.error('Error adding product:', error);
-      alert('Failed to add product!');
+      console.error(error);
+      setMessage('❌ Failed to add product.');
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -55,13 +83,18 @@ const AddProducts = () => {
     <div className="min-h-screen p-10 w-[80%] text-[#816F68] font-sans">
       <div className="max-w-xl mx-auto bg-white p-8 rounded-2xl shadow-lg">
         <h2 className="text-3xl font-bold mb-6 text-[#8D7471]">Add a New Product</h2>
+        
+        {message && (
+          <div className="mb-4 text-center font-medium text-green-600">{message}</div>
+        )}
+
         <form onSubmit={handleSubmit} className="space-y-5">
           <div>
             <label className="block mb-1 text-sm font-semibold">Product Name</label>
             <input
               type="text"
-              name="name"
-              value={formData.name}
+              name="productName"
+              value={productName}
               onChange={handleChange}
               className="w-full px-4 py-2 rounded-xl border border-gray-300 focus:outline-none focus:ring-2 focus:ring-[#9F838C]"
               placeholder="e.g., Cloud Cotton Tee"
@@ -73,8 +106,8 @@ const AddProducts = () => {
             <label className="block mb-1 text-sm font-semibold">Price (Rs.)</label>
             <input
               type="number"
-              name="price"
-              value={formData.price}
+              name="productPrice"
+              value={productPrice}
               onChange={handleChange}
               className="w-full px-4 py-2 rounded-xl border border-gray-300 focus:outline-none focus:ring-2 focus:ring-[#9F838C]"
               placeholder="e.g., 1500"
@@ -83,11 +116,11 @@ const AddProducts = () => {
           </div>
 
           <div>
-            <label className="block mb-1 text-sm font-semibold">Quantity in Stock</label>
+            <label className="block mb-1 text-sm font-semibold">Stock</label>
             <input
-              type="number"
-              name="quantity"
-              value={formData.quantity}
+              type="text"
+              name="stock"
+              value={stock}
               onChange={handleChange}
               className="w-full px-4 py-2 rounded-xl border border-gray-300 focus:outline-none focus:ring-2 focus:ring-[#9F838C]"
               placeholder="e.g., 50"
@@ -95,13 +128,12 @@ const AddProducts = () => {
             />
           </div>
 
-          {/* Brand */}
           <div>
             <label className="block mb-1 text-sm font-semibold">Brand</label>
             <input
               type="text"
               name="brand"
-              value={formData.brand}
+              value={brand}
               onChange={handleChange}
               className="w-full px-4 py-2 rounded-xl border border-gray-300 focus:outline-none focus:ring-2 focus:ring-[#9F838C]"
               placeholder="e.g., PandaWagon"
@@ -109,37 +141,55 @@ const AddProducts = () => {
             />
           </div>
 
-          {/* Category */}
           <div>
             <label className="block mb-1 text-sm font-semibold">Category</label>
             <input
               type="text"
               name="category"
-              value={formData.category}
+              value={category}
               onChange={handleChange}
               className="w-full px-4 py-2 rounded-xl border border-gray-300 focus:outline-none focus:ring-2 focus:ring-[#9F838C]"
               placeholder="e.g., Apparel"
               required
             />
           </div>
+
           <div>
-            <label className="block mb-1 text-sm font-semibold">Image URL</label>
+            <label className="block mb-1 text-sm font-semibold">Upload Product Image</label>
             <input
-              type="text"
-              name="image"
-              value={formData.image}
-              onChange={handleChange}
-              className="w-full h-25 text-center px-4 py-2 rounded-xl border border-gray-300 focus:outline-none focus:ring-2 focus:ring-[#9F838C]"
-              placeholder="Paste an image URL"
+              type="file"
+              accept="image/*"
+              onChange={handleFileChange}
+              className="w-full px-4 py-2 rounded-xl border border-gray-300 focus:outline-none focus:ring-2 focus:ring-[#9F838C]"
               required
             />
+            {productImagePreview && (
+              <div className="mt-3">
+                <img
+                  src={productImagePreview}
+                  alt="Preview"
+                  className="h-40 object-contain border border-dashed border-gray-300 p-2 rounded-xl"
+                />
+              </div>
+            )}
           </div>
 
           <button
             type="submit"
-            className="w-full py-3 bg-[#9F838C] text-white rounded-xl hover:bg-[#8D7471] transition"
+            className="w-full py-3 flex items-center justify-center gap-2 bg-[#9F838C] text-white rounded-xl hover:bg-[#8D7471] transition disabled:opacity-50"
+            disabled={isLoading}
           >
-            Add Product
+            {isLoading ? (
+              <>
+                <svg className="animate-spin h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                  <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" />
+                  <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v8H4z" />
+                </svg>
+                Uploading...
+              </>
+            ) : (
+              'Add Product'
+            )}
           </button>
         </form>
       </div>
