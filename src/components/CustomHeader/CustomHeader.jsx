@@ -1,4 +1,3 @@
-import React from "react";
 import { Layout, Typography, Avatar, Space, Input } from "antd";
 import { UserOutlined, BellOutlined, SearchOutlined } from "@ant-design/icons";
 
@@ -14,7 +13,7 @@ const CustomHeader = () => {
         display: "flex",
         justifyContent: "space-between",
         alignItems: "center",
-        boxShadow: "0 1px 4px rgba(0,0,0,0.1)",
+        boxShadow: "0 0px 0px rgba(0,0,0,0.1)",
       }}
     >
       <Title level={3} style={{ margin: 0 }}>
@@ -25,7 +24,7 @@ const CustomHeader = () => {
         <Input
           placeholder="Search..."
           prefix={<SearchOutlined />}
-          style={{ width: 200 }}
+          style={{ width: 300 }}
         />
         <BellOutlined style={{ fontSize: 20 }} />
         <Avatar icon={<UserOutlined />} />

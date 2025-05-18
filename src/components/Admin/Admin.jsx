@@ -15,12 +15,16 @@ import AddProducts from "../../pages/AddProducts/AddProducts";
 import User from "../../pages/User/User";
 import Settings from "../../pages/Settings/Settings";
 import EditProductList from "../../pages/EditProductList/EditProductList";
+import { useLocation } from "react-router-dom";
 
 const { Header: AntHeader, Content, Sider } = Layout;
-const siderWidth = 220;
+const siderWidth = 260;
+const headerHeight = 64;
 
 const Admin = () => {
-  const [selectedKey, setSelectedKey] = useState("1");
+  const location = useLocation();
+  const defaultSelectedKey = location.state?.selectedKey || "1";
+  const [selectedKey, setSelectedKey] = useState(defaultSelectedKey);
 
   const handleMenuClick = (e) => {
     setSelectedKey(e.key);
@@ -28,12 +32,17 @@ const Admin = () => {
 
   return (
     <Layout style={{ minHeight: "100vh" }}>
-      {/* Sidebar Navigation */}
+      {/* Fixed Sidebar */}
       <Sider
         width={siderWidth}
-        breakpoint="lg"
-        collapsedWidth="0"
-        style={{ backgroundColor: "#9F838C" }}
+        style={{
+          backgroundColor: "#9F838C",
+          position: "fixed",
+          height: "100vh",
+          top: 0,
+          left: 0,
+          zIndex: 1000,
+        }}
       >
         <div
           style={{
@@ -48,9 +57,12 @@ const Admin = () => {
         <Menu
           theme="dark"
           mode="inline"
-          defaultSelectedKeys={["1"]}
+          selectedKeys={[selectedKey]}
           onClick={handleMenuClick}
-          style={{ backgroundColor: "#9F838C" }}
+          style={{
+            backgroundColor: "#9F838C",
+            marginTop: "20px",
+          }}
         >
           <Menu.Item key="1" icon={<DashboardOutlined />}>
             Dashboard
@@ -73,13 +85,41 @@ const Admin = () => {
         </Menu>
       </Sider>
 
-      {/* Main Content Layout */}
-      <Layout className="bg-[#f7f7f7] overflow-x-hidden">
-        <AntHeader style={{ background: "#fff", padding: 0 }}>
-          <CustomHeader selectedKey={selectedKey} handleMenuClick={setSelectedKey} />
+      {/* Main Layout shifted right due to fixed sidebar */}
+      <Layout
+        style={{
+          marginLeft: siderWidth,
+        }}
+      >
+        {/* Fixed Header */}
+        <AntHeader
+          style={{
+            position: "fixed",
+            top: 0,
+            left: siderWidth,
+            right: 0,
+            height: `${headerHeight}px`,
+            zIndex: 1000,
+            background: "#fff",
+            padding: 0,
+            boxShadow: "0 2px 8px rgba(0, 0, 0, 0.1)",
+          }}
+        >
+          <CustomHeader
+            selectedKey={selectedKey}
+            handleMenuClick={setSelectedKey}
+          />
         </AntHeader>
 
-        <Content className="min-h-screen min-w-screen bg-[#f7f7f7] flex rounded-2xl p-6">
+        {/* Content below fixed header */}
+        <Content
+          style={{
+            marginTop: headerHeight,
+            padding: "24px",
+            minHeight: "100vh",
+            backgroundColor: "#f7f7f7",
+          }}
+        >
           {selectedKey === "1" && <Dashboard />}
           {selectedKey === "2" && <User />}
           {selectedKey === "3" && <AddProducts />}

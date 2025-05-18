@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
+import { useNavigate } from "react-router-dom";
 import Header from "../../components/Header/Header";
 import Footer from "../../components/Footer/Footer";
 
@@ -10,6 +11,8 @@ const Shop = () => {
   const [categoryFilter, setCategoryFilter] = useState("");
   const [minPrice, setMinPrice] = useState("");
   const [maxPrice, setMaxPrice] = useState("");
+
+  const navigate = useNavigate();
 
   useEffect(() => {
     const fetchProducts = async () => {
@@ -26,17 +29,14 @@ const Shop = () => {
 
   const filteredProducts = products
     .filter((product) => {
-      // Search by name
       if (searchTerm.trim() === "") return true;
       return product.productName.toLowerCase().includes(searchTerm.toLowerCase());
     })
     .filter((product) => {
-      // Filter by category
       if (categoryFilter === "") return true;
       return product.category.toLowerCase() === categoryFilter.toLowerCase();
     })
     .filter((product) => {
-      // Filter by price range
       const price = parseFloat(product.productPrice);
       const min = parseFloat(minPrice) || 0;
       const max = parseFloat(maxPrice) || Infinity;
@@ -97,7 +97,6 @@ const Shop = () => {
               <option value="Beauty">Beauty</option>
               <option value="Home">Home</option>
             </select>
-
             <input
               type="number"
               placeholder="Min Price"
@@ -120,7 +119,8 @@ const Shop = () => {
               filteredProducts.map((product) => (
                 <div
                   key={product._id}
-                  className="bg-white rounded-2xl shadow-lg overflow-hidden hover:shadow-xl transition duration-300 group"
+                  onClick={() => navigate(`/product/${product._id}`)}
+                  className="cursor-pointer bg-white rounded-2xl shadow-lg overflow-hidden hover:shadow-xl transition duration-300 group"
                 >
                   <div className="w-full h-60 overflow-hidden">
                     <img
@@ -131,15 +131,15 @@ const Shop = () => {
                   </div>
                   <div className="p-4">
                     <h3 className="text-lg font-medium">{product.productName}</h3>
-                    <p className="text-gray-600">Rs.{product.productPrice}</p>
-                    <button className="mt-4 w-full py-2 rounded-xl bg-black text-white hover:bg-gray-800 transition font-semibold">
-                      Add to Cart
-                    </button>
+                    <p className="text-gray-600 mb-1">Rs.{product.productPrice}</p>
+                    <p className="text-sm text-gray-500">In Stock: {product.stock}</p>
                   </div>
                 </div>
               ))
             ) : (
-              <p className="col-span-full text-center text-gray-500 text-xl">No products found. Try adjusting your filters.</p>
+              <p className="col-span-full text-center text-gray-500 text-xl">
+                No products found. Try adjusting your filters.
+              </p>
             )}
           </div>
         </div>

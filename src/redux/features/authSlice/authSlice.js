@@ -32,8 +32,8 @@ const authSlice = createSlice({
             state.isLoading = false
             state.user = action.payload.data
             localStorage.setItem("user",JSON.stringify(action.payload.data))
-            const {token} = action.payload
-            localStorage.setItem("AccessToken",token)
+            const {accessToken} = action.payload
+            localStorage.setItem("AccessToken",accessToken)
     
           })
           .addCase(userLogin.rejected,(state,action)=>{

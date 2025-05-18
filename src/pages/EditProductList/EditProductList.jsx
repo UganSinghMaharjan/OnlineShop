@@ -1,80 +1,107 @@
-import { useEffect, useState } from 'react';
+import  { useEffect, useState } from 'react';
+import axios from 'axios';
+import { FaEdit, FaTrash } from 'react-icons/fa';
+import { useNavigate } from 'react-router-dom';
 
 const EditProductList = () => {
   const [products, setProducts] = useState([]);
-  const [error, setError] = useState(null);
+  const [loading, setLoading] = useState(true);
+
+  const imageURL = "http://localhost:8000/gallery";
+  const navigate = useNavigate();
+
+  // Define the fields to display
+  const productFields = [
+    { label: "S.N", key: "index" },
+    { label: "Name", key: "productName" },
+    { label: "Brand", key: "brand" },
+    { label: "Category", key: "category" },
+    { label: "Price", key: "productPrice" },
+    { label: "Stock", key: "stock" },
+    { label: "Image", key: "productImage" },
+    { label: "Action", key: "actions" }
+  ];
 
   useEffect(() => {
     const fetchProducts = async () => {
       try {
-        console.log('Fetching products...');
-        const response = await fetch('http://localhost:8000/api/v1/all/products');
-
-        // Log the status to check if the request is successful
-        console.log('Response Status:', response.status);
-        
-        // Check if the response is OK (status 200)
-        if (!response.ok) {
-          throw new Error('Network response was not ok');
-        }
-
-        const data = await response.json();
-        console.log('Fetched data:', data);
-        setProducts(data);
+        const res = await axios.get('http://localhost:8000/api/v1/all/products');
+        setProducts(res.data.data);
       } catch (error) {
-        console.error('Error fetching products:', error);
-        setError(error.message); // Set error message to state
+        console.error("Error fetching products:", error);
+      } finally {
+        setLoading(false);
       }
     };
 
     fetchProducts();
   }, []);
 
+  const handleDelete = async (id) => {
+    if (!window.confirm("Are you sure you want to delete this product?")) return;
+    try {
+      await axios.delete(`http://localhost:8000/api/v1/delete/${id}`);
+      setProducts(products.filter(p => p._id !== id));
+    } catch (error) {
+      console.error("Error deleting product:", error);
+    }
+  };
+
   return (
-    <div className="p-8 bg-gray-50 rounded-lg shadow-md">
-      <h1 className="text-2xl font-semibold text-center text-gray-800 mb-6">Edit Product List</h1>
-      
-      {error && (
-        <div className="text-red-500 text-center mb-4">
-          <strong>Error: </strong>{error}
+    <div className="p-6">
+      {loading ? (
+        <p className="text-center text-lg">Loading...</p>
+      ) : (
+        <div className="overflow-x-auto shadow rounded-lg">
+          <table className="w-full text-sm text-left border border-gray-200">
+            <thead className="bg-gray-100 text-xs uppercase">
+              <tr>
+                {productFields.map((field, index) => (
+                  <th key={index} className="px-19 py-4">{field.label}</th>
+                ))}
+              </tr>
+            </thead>
+            <tbody>
+              {products.map((product, index) => (
+                <tr key={product._id} className="border-t">
+                  {productFields.map((field, idx) => (
+                    <td key={idx} className="px-19 py-6">
+                      {field.key === "index" ? (
+                        index + 1
+                      ) : field.key === "productImage" ? (
+                        <img
+                          src={`${imageURL}/${product.productImage}`}
+                          alt={product.productName}
+                          className="w-10 h-10 object-contain"
+                        />
+                      ) : field.key === "productPrice" ? (
+                        `Rs. ${product[field.key]}`
+                      ) : field.key === "actions" ? (
+                        <div className="flex gap-3 text-lg">
+                          <button
+                            onClick={() => navigate(`/editProduct/${product._id}`)}
+                            className="text-blue-500 hover:text-blue-700"
+                          >
+                            <FaEdit />
+                          </button>
+                          <button
+                            onClick={() => handleDelete(product._id)}
+                            className="text-red-500 hover:text-red-700"
+                          >
+                            <FaTrash />
+                          </button>
+                        </div>
+                      ) : (
+                        product[field.key]
+                      )}
+                    </td>
+                  ))}
+                </tr>
+              ))}
+            </tbody>
+          </table>
         </div>
       )}
-
-      <table className="min-w-full bg-white border-collapse">
-        <thead>
-          <tr>
-            <th className="py-3 px-4 text-left text-white bg-green-600">Product Name</th>
-            <th className="py-3 px-4 text-left text-white bg-green-600">Price</th>
-            <th className="py-3 px-4 text-left text-white bg-green-600">Category</th>
-            <th className="py-3 px-4 text-left text-white bg-green-600">Actions</th>
-          </tr>
-        </thead>
-        <tbody>
-          {products.length === 0 ? (
-            <tr>
-              <td colSpan="4" className="py-3 px-4 text-center text-gray-500 italic">
-                No products available
-              </td>
-            </tr>
-          ) : (
-            products.map((product) => (
-              <tr key={product.id} className="hover:bg-gray-100">
-                <td className="py-3 px-4">{product.name}</td>
-                <td className="py-3 px-4">${product.price}</td>
-                <td className="py-3 px-4">{product.category}</td>
-                <td className="py-3 px-4">
-                  <button className="bg-blue-500 text-white py-2 px-4 rounded hover:bg-blue-600 mr-2">
-                    Edit
-                  </button>
-                  <button className="bg-red-500 text-white py-2 px-4 rounded hover:bg-red-600">
-                    Delete
-                  </button>
-                </td>
-              </tr>
-            ))
-          )}
-        </tbody>
-      </table>
     </div>
   );
 };

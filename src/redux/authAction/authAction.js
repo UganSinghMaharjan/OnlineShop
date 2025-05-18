@@ -16,3 +16,17 @@ export const userLogin = createAsyncThunk(
     }
     
   );
+
+ export const userSignIn = createAsyncThunk(
+  "auth/SignIn",
+  async({SignInvalue, toast, navigate},{rejectWithValue})=>{
+    try {
+       const response = await API.post("/login", SignInvalue);
+        toast.success(response.data.message || "Sign in successFully!");
+        navigate('/login');
+        return response.data;
+    } catch (error) {
+       return rejectWithValue(error.response.data);
+    }
+  }
+ )

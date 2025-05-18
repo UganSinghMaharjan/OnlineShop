@@ -3,11 +3,10 @@ import {BrowserRouter as Router, Routes, Route} from "react-router-dom";
 import { ToastContainer } from 'react-toastify';
 import Login from './components/Login/Login';
 import Home from './pages/Home/home';
-import Shop from './pages/Shop/shop';
 import Header from './components/Header/Header';
 import Carousel from './pages/Carousel/Carousel';
 import ItemCard from './pages/ItemCard/ItemCard';
-import SignIn from './components/SignIn/SignIn';
+
 import PageNotFound from './pages/PageNotFound/PageNotFound';
 import AboutUs from './pages/AboutUs/AboutUs';
 import Footer from './components/Footer/Footer';
@@ -22,6 +21,10 @@ import AddProducts from './pages/AddProducts/AddProducts';
 import User from './pages/User/User';
 import Settings from './pages/Settings/Settings';
 import EditProductList from './pages/EditProductList/EditProductList';
+import EditProduct from './pages/EditProduct/EditProduct';
+import SignIn from './components/SignIn/SignIn';
+import PurchasePage from './pages/PurchasePage/PurchasePage';
+import Shop from './pages/Shop/Shop';
 
 
 
@@ -46,7 +49,12 @@ function App() {
         <Route path='addproducts' element={<AddProducts/>}/>
         <Route path='user' element={<User/>}/>
         <Route path='settings' element={<Settings/>}/>
-        <Route path='editProduct' element={<EditProductList/>}/>
+        <Route path="/editProduct/:id" element={<EditProduct />} />
+        <Route path='/editProduct' element={<EditProduct/>}/>
+        <Route path='/EditProductlist' element={<EditProductList/>}/>
+        <Route path="/product/:id" element={<PurchasePage />} />
+
+        <Route path='/purchseProducts' element={<PurchasePage/>}/>
         
 
         <Route path='/profile'element={<Profile/>}/>
