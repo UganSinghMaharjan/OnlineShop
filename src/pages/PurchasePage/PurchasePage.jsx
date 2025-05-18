@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
+import { useParams, useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import API from "../../redux/api/api";
 
@@ -8,6 +8,8 @@ const PurchasePage = () => {
   const userId = user?._id;
 
   const { id } = useParams();
+  const navigate = useNavigate();
+
   const [singleProduct, setSingleProduct] = useState(null);
   const [quantity, setQuantity] = useState(1);
 
@@ -64,6 +66,15 @@ const PurchasePage = () => {
 
   return (
     <div className="min-h-screen bg-gray-50 text-gray-800 px-6 py-12 max-w-7xl mx-auto">
+
+      {/* Back to Shop Button */}
+      <button
+        onClick={() => navigate("/shop")}
+        className="mb-6 px-4 py-2 bg-gray-300 hover:bg-gray-400 rounded-lg font-semibold"
+      >
+        ← Back to Shop
+      </button>
+
       <div className="bg-white rounded-2xl shadow-lg p-6 mb-12 flex flex-col md:flex-row gap-8 items-center">
         {singleProduct ? (
           <>
@@ -133,7 +144,6 @@ const PurchasePage = () => {
           <p>Loading product...</p>
         )}
       </div>
-      
     </div>
   );
 };

@@ -1,29 +1,40 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import Header from "../../components/Header/Header";
 import Footer from "../../components/Footer/Footer";
-
-const cartItems = [
-  {
-    id: 1,
-    name: "Dreamy Denim Jacket",
-    price: "$59.99",
-    quantity: 1,
-    image: "https://source.unsplash.com/featured/?jacket",
-  },
-  {
-    id: 2,
-    name: "Cloud Cotton Tee",
-    price: "$29.99",
-    quantity: 2,
-    image: "https://source.unsplash.com/featured/?tshirt",
-  },
-];
+import { toast } from "react-toastify";
+import API from "../../redux/api/api";
 
 const Cart = () => {
-  const total = cartItems.reduce((acc, item) => {
-    const price = parseFloat(item.price.replace('$', ''));
-    return acc + price * item.quantity;
-  }, 0);
+  const [cartItems, setCartItems] = useState([]);
+  const [loading, setLoading] = useState(true);
+
+  const user = JSON.parse(localStorage.getItem("user"));
+  const userId = user?._id;
+
+  useEffect(() => {
+    const fetchCart = async () => {
+      try {
+        const res = await API.get(`http://localhost:8000/api/v1/get-my-cart/${userId}`);
+        const items = res.data.data.items.map((item) => ({
+          id: item.productId._id,
+          name: item.productId.productName,
+          price: item.productId.productPrice,
+          quantity: item.quantity,
+          image: `http://localhost:8000/gallery/${item.productId.productImage}`,
+        }));
+        setCartItems(items);
+      } catch (error) {
+        console.error("Failed to load cart:", error);
+        toast.error("Could not load cart. Try again later.");
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    if (userId) fetchCart();
+  }, [userId]);
+
+  const total = cartItems.reduce((acc, item) => acc + item.price * item.quantity, 0);
 
   return (
     <div className="min-h-screen flex flex-col justify-between bg-[#BAABBD] text-[#816F68] font-sans">
@@ -41,7 +52,9 @@ const Cart = () => {
 
       {/* Cart Items */}
       <div className="w-11/12 md:w-4/5 mx-auto py-12 grid gap-6">
-        {cartItems.length === 0 ? (
+        {loading ? (
+          <p className="text-center">Loading cart...</p>
+        ) : cartItems.length === 0 ? (
           <p className="text-center text-lg text-[#816F68]">
             Your cart is currently empty.
           </p>
@@ -61,7 +74,7 @@ const Cart = () => {
                   <h2 className="text-xl font-semibold text-[#8D7471]">
                     {item.name}
                   </h2>
-                  <p className="text-[#816F68]">{item.price}</p>
+                  <p className="text-[#816F68]">Rs. {item.price}</p>
                   <p className="text-sm text-[#9F838C]">
                     Quantity: {item.quantity}
                   </p>
@@ -75,15 +88,14 @@ const Cart = () => {
         )}
 
         {/* Total Section */}
-        {cartItems.length > 0 && (
-         <div className="border border-gray-200 rounded-xl p-5 text-right bg-gray-50">
-         <div className="text-sm text-gray-500 mb-1">Order Total</div>
-         <h2 className="text-2xl font-semibold text-gray-800">${total.toFixed(2)}</h2>
-         <button className="mt-3 px-5 py-2 bg-black text-white rounded-lg text-sm hover:bg-gray-800 transition">
-           Checkout
-         </button>
-       </div>
-       
+        {!loading && cartItems.length > 0 && (
+          <div className="border border-gray-200 rounded-xl p-5 text-right bg-gray-50">
+            <div className="text-sm text-gray-500 mb-1">Order Total</div>
+            <h2 className="text-2xl font-semibold text-gray-800">Rs. {total.toFixed(2)}</h2>
+            <button className="mt-3 px-5 py-2 bg-black text-white rounded-lg text-sm hover:bg-gray-800 transition">
+              Checkout
+            </button>
+          </div>
         )}
       </div>
 

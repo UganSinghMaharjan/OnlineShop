@@ -7,12 +7,27 @@ import { FaBasketShopping } from "react-icons/fa6";
 import { IoMdContacts } from "react-icons/io";
 import { Dropdown, Button, Space } from "antd";
 import { DownOutlined } from "@ant-design/icons";
+import { useDispatch } from "react-redux";
+import { setLogout } from "../../redux/features/authSlice/authSlice.js";
 
 const Header = () => {
+  const dispatch = useDispatch();
+
+  // Get user info from localStorage
+  const user = JSON.parse(localStorage.getItem("user"));
+  const userName = user ? `${user.firstName} ${user.lastName}` : "Profile";
+
+  const handleLogout = () => {
+    dispatch(setLogout());
+    localStorage.removeItem("user");
+    localStorage.removeItem("AccessToken");
+    window.location.href = "/"; // Redirect to login page after logout
+  };
+
   const menuItems = [
     {
       key: '1',
-      label: 'Profile',
+      label: userName,
     },
     {
       key: '2',
@@ -20,14 +35,18 @@ const Header = () => {
     },
     {
       key: '3',
-      label: 'Logout',
+      label: (
+        <span onClick={handleLogout} style={{ cursor: "pointer" }}>
+          Logout
+        </span>
+      ),
     },
   ];
 
   return (
     <div className="w-full bg-gradient-to-r from-[#816F68] to-[#C9C9EE] shadow-md z-50">
       <div className="flex items-center justify-between px-6 py-4 max-w-7xl mx-auto relative">
-        
+
         {/* Logo on the left */}
         <div className="flex-shrink-0">
           <NavLink to="/home">
@@ -91,7 +110,7 @@ const Header = () => {
         </div>
 
         {/* Dropdown Menu on the right */}
-        <div className="flex-shrink-">
+        <div className="flex-shrink-0">
           <Dropdown
             menu={{ items: menuItems }}
             trigger={['click']}
