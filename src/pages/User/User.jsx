@@ -1,6 +1,7 @@
 import React from 'react';
 
 const User = () => {
+  
   const users = [
     {
       name: "Jane Doe",
