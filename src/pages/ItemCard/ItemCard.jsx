@@ -26,7 +26,10 @@ const ItemCard = () => {
   }, [index]);
 
   return (
-    <div className="bg-[#9F838C] text-white flex flex-col items-center justify-center min-h-screen">
+    <div className="bg-[#9F838C] text-white flex flex-col items-center justify-center min-h-auto">
+      <h2 className="text-5xl font-bold text-center text-[#003249] mb-6 mt-13">
+        Featured Collections
+      </h2>
 
       {/* Carousel Container */}
       <div
@@ -60,7 +63,7 @@ const ItemCard = () => {
       </div>
 
       {/* Film Strip Dots */}
-      <div className="flex space-x-2 mt-4">
+      <div className="flex space-x-2 mt-4 mb-13">
         {images.map((_, i) => (
           <button
             key={i}

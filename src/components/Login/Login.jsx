@@ -28,14 +28,6 @@ const Login = () => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-
-    // 🔐 Admin login condition
-    if (email === 'Admin@gmail.com' && password === 'Admin@123') {
-      toast.success('Welcome, Admin!');
-      navigate('/admin');
-      return; // 🚪 Exit early so we don’t dispatch userLogin
-    }
-
     // 👥 Regular user login
     dispatch(userLogin({ loginValue, toast, navigate }));
   };
@@ -107,12 +99,12 @@ const Login = () => {
           <div className="mt-4 text-center">
             <p className="text-sm text-gray-600">Don't have an account?</p>
             <NavLink
-              to="/signin"
+              to="/register"
               className="text-sm font-light text-blue-600 hover:underline mt-1"
             >
               Sign Up
             </NavLink>
-          </div>
+        </div>
         </form>
       </div>
     </div>

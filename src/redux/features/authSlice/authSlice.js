@@ -10,7 +10,7 @@ const authSlice = createSlice({
       message: "",
       user: null,
       products: [],
-      isAuthenticated: false,
+      isAuthenticated: !!localStorage.getItem("AccessToken"),
     },
     reducers: {
         setLogout: (state) => {
@@ -18,6 +18,11 @@ const authSlice = createSlice({
           state.user = null;
           localStorage.clear();
         },
+        setUser: (state, action) => {
+  state.user = action.payload;
+  state.isAuthenticated = !!action.payload;
+},
+
         setClearError: (state) => {
           state.error = null;
         },
@@ -31,6 +36,7 @@ const authSlice = createSlice({
           .addCase(userLogin.fulfilled,(state,action)=>{
             state.isLoading = false
             state.user = action.payload.data
+             state.isAuthenticated = !!action.payload;
             localStorage.setItem("user",JSON.stringify(action.payload.data))
             const {accessToken} = action.payload
             localStorage.setItem("AccessToken",accessToken)
@@ -43,5 +49,5 @@ const authSlice = createSlice({
           })
         },
     });
-    export const { setClearError,setLogout } = authSlice.actions;
+    export const { setClearError,setLogout,setUser } = authSlice.actions;
     export default authSlice.reducer;

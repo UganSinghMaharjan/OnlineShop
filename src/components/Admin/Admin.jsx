@@ -8,6 +8,8 @@ import {
   LogoutOutlined,
   EditOutlined,
 } from "@ant-design/icons";
+import { useLocation, useNavigate } from "react-router-dom";
+import { useDispatch } from "react-redux";
 
 import Dashboard from "../../pages/Dashboard/Dashboard";
 import CustomHeader from "../CustomHeader/CustomHeader";
@@ -15,7 +17,7 @@ import AddProducts from "../../pages/AddProducts/AddProducts";
 import User from "../../pages/User/User";
 import Settings from "../../pages/Settings/Settings";
 import EditProductList from "../../pages/EditProductList/EditProductList";
-import { useLocation } from "react-router-dom";
+import { setLogout } from "../../redux/features/authSlice/authSlice";
 
 const { Header: AntHeader, Content, Sider } = Layout;
 const siderWidth = 260;
@@ -23,16 +25,34 @@ const headerHeight = 64;
 
 const Admin = () => {
   const location = useLocation();
+  const navigate = useNavigate();
+  const dispatch = useDispatch();
+
   const defaultSelectedKey = location.state?.selectedKey || "1";
   const [selectedKey, setSelectedKey] = useState(defaultSelectedKey);
 
   const handleMenuClick = (e) => {
-    setSelectedKey(e.key);
+    const { key } = e;
+
+    if (key === "6") {
+      // 🔒 Perform logout
+      dispatch(setLogout());
+      localStorage.removeItem("user");
+      localStorage.removeItem("AccessToken");
+
+      // Show logout screen briefly then redirect
+      setSelectedKey(key);
+      setTimeout(() => {
+        navigate("/");
+      }, 1000);
+    } else {
+      setSelectedKey(key);
+    }
   };
 
   return (
     <Layout style={{ minHeight: "100vh" }}>
-      {/* Fixed Sidebar */}
+      {/* Sidebar */}
       <Sider
         width={siderWidth}
         style={{
@@ -85,13 +105,9 @@ const Admin = () => {
         </Menu>
       </Sider>
 
-      {/* Main Layout shifted right due to fixed sidebar */}
-      <Layout
-        style={{
-          marginLeft: siderWidth,
-        }}
-      >
-        {/* Fixed Header */}
+      {/* Main Content Layout */}
+      <Layout style={{ marginLeft: siderWidth }}>
+        {/* Header */}
         <AntHeader
           style={{
             position: "fixed",
@@ -111,7 +127,7 @@ const Admin = () => {
           />
         </AntHeader>
 
-        {/* Content below fixed header */}
+        {/* Page Content */}
         <Content
           style={{
             marginTop: headerHeight,
