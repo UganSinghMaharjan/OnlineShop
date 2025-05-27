@@ -30,7 +30,7 @@ const Home = () => {
 
         <HomeAni />
 
-        <div className="font-bold border rounded-2xl px-4 py-2 mt-6 bg-[#697565] text-black hover:bg-[#ECDFCC] transition duration-300">
+        <div className="font-bold border rounded-2xl px-4 py-2 mt-6 bg-[#a8a8a8] text-black hover:bg-[#ECDFCC] transition duration-300">
           <NavLink to="/shop">Shop Now!!</NavLink>
         </div>
       </div>

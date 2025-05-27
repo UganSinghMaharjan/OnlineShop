@@ -4,6 +4,36 @@ import { useNavigate } from "react-router-dom";
 import Header from "../../components/Header/Header";
 import Footer from "../../components/Footer/Footer";
 
+// Combined insertion sort & price filter function
+const insertionSortWithPriceFilter = (arr, order = "asc", minPrice = 0, maxPrice = Infinity) => {
+  const filteredSortedArr = [];
+
+  const min = parseFloat(minPrice) || 0;
+  const max = parseFloat(maxPrice) || Infinity;
+
+  for (let i = 0; i < arr.length; i++) {
+    const price = parseFloat(arr[i].productPrice);
+
+    if (price >= min && price <= max) {
+      let current = arr[i];
+      let j = filteredSortedArr.length - 1;
+
+      while (
+        j >= 0 &&
+        (order === "asc"
+          ? parseFloat(filteredSortedArr[j].productPrice) > price
+          : parseFloat(filteredSortedArr[j].productPrice) < price)
+      ) {
+        filteredSortedArr[j + 1] = filteredSortedArr[j];
+        j--;
+      }
+      filteredSortedArr[j + 1] = current;
+    }
+  }
+
+  return filteredSortedArr;
+};
+
 const Shop = () => {
   const [products, setProducts] = useState([]);
   const [searchTerm, setSearchTerm] = useState("");
@@ -27,28 +57,31 @@ const Shop = () => {
     fetchProducts();
   }, []);
 
-  const filteredProducts = products
-    .filter((product) => {
-      if (searchTerm.trim() === "") return true;
-      return product.productName.toLowerCase().includes(searchTerm.toLowerCase());
-    })
-    .filter((product) => {
-      if (categoryFilter === "") return true;
-      return product.category.toLowerCase() === categoryFilter.toLowerCase();
-    })
-    .filter((product) => {
+  // Step 1: filter by searchTerm and category
+  let filteredProducts = products.filter((product) => {
+    const term = searchTerm.trim().toLowerCase();
+    const matchesSearch =
+      term === "" || product.productName.toLowerCase().startsWith(term);
+    const matchesCategory =
+      categoryFilter === "" ||
+      product.category.toLowerCase() === categoryFilter.toLowerCase();
+
+    return matchesSearch && matchesCategory;
+  });
+
+  // Step 2 & 3: filter by price AND sort by price (if needed) in one combined function
+  if (sortOrder === "low-to-high" || sortOrder === "high-to-low") {
+    const order = sortOrder === "low-to-high" ? "asc" : "desc";
+    filteredProducts = insertionSortWithPriceFilter(filteredProducts, order, minPrice, maxPrice);
+  } else {
+    // If no sorting, just filter by price alone
+    const min = parseFloat(minPrice) || 0;
+    const max = parseFloat(maxPrice) || Infinity;
+    filteredProducts = filteredProducts.filter((product) => {
       const price = parseFloat(product.productPrice);
-      const min = parseFloat(minPrice) || 0;
-      const max = parseFloat(maxPrice) || Infinity;
       return price >= min && price <= max;
-    })
-    .sort((a, b) => {
-      const priceA = parseFloat(a.productPrice);
-      const priceB = parseFloat(b.productPrice);
-      if (sortOrder === "low-to-high") return priceA - priceB;
-      if (sortOrder === "high-to-low") return priceB - priceA;
-      return 0;
     });
+  }
 
   return (
     <>
@@ -70,7 +103,7 @@ const Shop = () => {
           <div className="mb-8 flex flex-col sm:flex-row justify-center items-center gap-4 flex-wrap">
             <input
               type="text"
-              placeholder="Search products..."
+              placeholder="Search products by first letters..."
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
               className="w-full max-w-md px-4 py-2 rounded-xl border border-gray-300 focus:outline-none focus:ring-2 focus:ring-indigo-400"
@@ -103,6 +136,7 @@ const Shop = () => {
               value={minPrice}
               onChange={(e) => setMinPrice(e.target.value)}
               className="w-32 px-4 py-2 rounded-xl border border-gray-300 focus:outline-none focus:ring-2 focus:ring-indigo-400"
+              min="0"
             />
             <input
               type="number"
@@ -110,6 +144,7 @@ const Shop = () => {
               value={maxPrice}
               onChange={(e) => setMaxPrice(e.target.value)}
               className="w-32 px-4 py-2 rounded-xl border border-gray-300 focus:outline-none focus:ring-2 focus:ring-indigo-400"
+              min="0"
             />
           </div>
 
@@ -132,7 +167,9 @@ const Shop = () => {
                   <div className="p-4">
                     <h3 className="text-lg font-medium">{product.productName}</h3>
                     <p className="text-gray-600 mb-1">Rs.{product.productPrice}</p>
-                    <p className="text-sm text-gray-500">In Stock: {product.stock}</p>
+                    <p className="text-sm text-gray-500">
+                      In Stock: {product.stock}
+                    </p>
                   </div>
                 </div>
               ))

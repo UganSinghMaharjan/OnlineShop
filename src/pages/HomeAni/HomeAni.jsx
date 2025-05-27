@@ -31,7 +31,7 @@ const HomeAni = () => {
       x: {
         repeat: Infinity,
         repeatType: "loop",
-        duration: 12,
+        duration: 25,
         ease: "linear",
       },
     },

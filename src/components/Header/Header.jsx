@@ -24,21 +24,94 @@ const Header = () => {
   };
 
   const menuItems = [
-    { key: "1", label: "Profile" },
-    {
-      key: "2",
-      label: user?.role === "admin" ? <Link to="/admin-layout">Dashboard</Link> : null,
-    },
-    { key: "3", label: "Settings" },
-    {
-      key: "4",
-      label: (
-        <span onClick={handleLogout} style={{ cursor: "pointer" }}>
-          Logout
+  {
+    key: "1",
+    label: (
+      <Link
+        to="/profile"
+        style={{
+          display: "block",
+          padding: "8px 16px",
+          color: "#333",
+          textDecoration: "none",
+        }}
+        className="dropdown-menu-item"
+      >
+        Profile
+      </Link>
+    ),
+  },
+  {
+    key: "2",
+    label:
+      user?.role === "admin" ? (
+        <Link
+          to="/admin-layout"
+          style={{
+            display: "block",
+            padding: "8px 16px",
+            color: "#333",
+            textDecoration: "none",
+          }}
+          className="dropdown-menu-item"
+        >
+          Dashboard
+        </Link>
+      ) : (
+        <span
+          style={{
+            display: "none",
+            padding: "8px 16px",
+            color: "#aaa",
+            cursor: "not-allowed",
+            userSelect: "none",
+          }}
+          className="dropdown-menu-item disabled"
+        >
+          Dashboard
         </span>
       ),
-    },
-  ];
+  },
+  {
+  key: "3",
+  label: (
+    <span
+      onClick={() => alert("Settings clicked!")}
+      style={{
+        display: "block",
+        padding: "8px 16px",
+        color: "#333",
+        cursor: "pointer",
+      }}
+      className="dropdown-menu-item"
+    >
+      Settings
+    </span>
+  ),
+},
+
+  {
+    key: "4",
+    label: (
+      <span
+        onClick={handleLogout}
+        style={{
+          display: "block",
+          padding: "8px 16px",
+          color: "#d32f2f",
+          cursor: "pointer",
+          fontWeight: "600",
+          transition: "background-color 0.3s ease",
+        }}
+        className="dropdown-menu-item logout"
+        onMouseEnter={(e) => (e.currentTarget.style.backgroundColor = "#ffebee")}
+        onMouseLeave={(e) => (e.currentTarget.style.backgroundColor = "transparent")}
+      >
+        Logout
+      </span>
+    ),
+  },
+];
 
   return (
     <header className="w-full bg-gradient-to-r from-[#816F68] to-[#C9C9EE] shadow-md z-50">

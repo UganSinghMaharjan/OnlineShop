@@ -7,8 +7,10 @@ import API from "../../redux/api/api";
 const Cart = () => {
   const [cartItems, setCartItems] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [confirmingCheckout, setConfirmingCheckout] = useState(false);
 
   const user = JSON.parse(localStorage.getItem("user"));
+  const token = localStorage.getItem("token");
   const userId = user?._id;
 
   useEffect(() => {
@@ -36,8 +38,37 @@ const Cart = () => {
 
   const total = cartItems.reduce((acc, item) => acc + item.price * item.quantity, 0);
 
+  const handleCheckout = async () => {
+    try {
+      const res = await API.post(
+        "http://localhost:8000/api/v1/add-to-order",
+        {},
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+
+      toast.success("Order placed successfully!");
+      setCartItems([]);
+      setConfirmingCheckout(false);
+    } catch (error) {
+      console.error("Checkout failed:", error);
+      toast.error("Failed to place order. Try again.");
+    }
+  };
+
+  const handleConfirmClick = () => {
+    setConfirmingCheckout(true);
+  };
+
+  const handleCancel = () => {
+    setConfirmingCheckout(false);
+  };
+
   return (
-    <div className="min-h-screen flex flex-col justify-between bg-[#BAABBD] text-[#816F68] font-sans">
+    <div className="min-h-screen flex flex-col justify-between bg-[#BAABBD] text-[#816F68] font-sans relative">
       <Header />
 
       {/* Hero Section */}
@@ -92,12 +123,39 @@ const Cart = () => {
           <div className="border border-gray-200 rounded-xl p-5 text-right bg-gray-50">
             <div className="text-sm text-gray-500 mb-1">Order Total</div>
             <h2 className="text-2xl font-semibold text-gray-800">Rs. {total.toFixed(2)}</h2>
-            <button className="mt-3 px-5 py-2 bg-black text-white rounded-lg text-sm hover:bg-gray-800 transition">
+            <button
+              onClick={handleConfirmClick}
+              className="mt-3 px-5 py-2 bg-black text-white rounded-lg text-sm hover:bg-gray-800 transition"
+            >
               Checkout
             </button>
           </div>
         )}
       </div>
+
+      {/* Confirmation Modal */}
+      {confirmingCheckout && (
+        <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
+          <div className="bg-white p-6 rounded-2xl shadow-xl text-center space-y-4 w-80">
+            <h2 className="text-lg font-semibold text-gray-800">Confirm Order?</h2>
+            <p className="text-sm text-gray-600">Are you sure you want to place this order?</p>
+            <div className="flex justify-center gap-4 mt-4">
+              <button
+                onClick={handleCancel}
+                className="px-4 py-2 rounded-md border border-gray-300 text-gray-600 hover:bg-gray-100 transition"
+              >
+                Cancel
+              </button>
+              <button
+                onClick={handleCheckout}
+                className="px-4 py-2 rounded-md bg-green-600 text-white hover:bg-green-700 transition"
+              >
+                Confirm
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
 
       <Footer />
     </div>
