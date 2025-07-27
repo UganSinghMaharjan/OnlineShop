@@ -1,87 +1,196 @@
 import React from "react";
-import bc from "../../assets/images/bc.jpg"
-import { NavLink } from "react-router-dom";
+import logo from "../../assets/images/logo.png";
+import { Link, NavLink } from "react-router-dom";
 import { FiMenu } from "react-icons/fi";
-import { FaHome } from "react-icons/fa";
+import { FaHome, FaCartArrowDown, FaInfo } from "react-icons/fa";
 import { FaBasketShopping } from "react-icons/fa6";
-import { FaCartArrowDown } from "react-icons/fa";
 import { IoMdContacts } from "react-icons/io";
-import { FaInfo } from "react-icons/fa";
+import { Dropdown, Button, Space } from "antd";
+import { DownOutlined } from "@ant-design/icons";
+import { useDispatch, useSelector } from "react-redux";
+import { setLogout } from "../../redux/features/authSlice/authSlice.js";
 
 const Header = () => {
+  const dispatch = useDispatch();
+  const { isAuthenticated, user } = useSelector((state) => state.auth);
+
+  const userName = user ? `${user.firstName} ${user.lastName}` : "Profile";
+
+  const handleLogout = () => {
+    dispatch(setLogout());
+    localStorage.removeItem("user");
+    localStorage.removeItem("AccessToken");
+    window.location.href = "/";
+  };
+
+  const menuItems = [
+  {
+    key: "1",
+    label: (
+      <Link
+        to="/profile"
+        style={{
+          display: "block",
+          padding: "8px 16px",
+          color: "#333",
+          textDecoration: "none",
+        }}
+        className="dropdown-menu-item"
+      >
+        Profile
+      </Link>
+    ),
+  },
+  {
+    key: "2",
+    label:
+      user?.role === "admin" ? (
+        <Link
+          to="/admin-layout"
+          style={{
+            display: "block",
+            padding: "8px 16px",
+            color: "#333",
+            textDecoration: "none",
+          }}
+          className="dropdown-menu-item"
+        >
+          Dashboard
+        </Link>
+      ) : (
+        <span
+          style={{
+            display: "none",
+            padding: "8px 16px",
+            color: "#aaa",
+            cursor: "not-allowed",
+            userSelect: "none",
+          }}
+          className="dropdown-menu-item disabled"
+        >
+          Dashboard
+        </span>
+      ),
+  },
+  {
+  key: "3",
+  label: (
+    <span
+      onClick={() => alert("Settings clicked!")}
+      style={{
+        display: "block",
+        padding: "8px 16px",
+        color: "#333",
+        cursor: "pointer",
+      }}
+      className="dropdown-menu-item"
+    >
+      Settings
+    </span>
+  ),
+},
+
+  {
+    key: "4",
+    label: (
+      <span
+        onClick={handleLogout}
+        style={{
+          display: "block",
+          padding: "8px 16px",
+          color: "#d32f2f",
+          cursor: "pointer",
+          fontWeight: "600",
+          transition: "background-color 0.3s ease",
+        }}
+        className="dropdown-menu-item logout"
+        onMouseEnter={(e) => (e.currentTarget.style.backgroundColor = "#ffebee")}
+        onMouseLeave={(e) => (e.currentTarget.style.backgroundColor = "transparent")}
+      >
+        Logout
+      </span>
+    ),
+  },
+];
+
   return (
-    <div className="w-full bg-[#181C14] shadow-md z-50">
-      <div className="flex items-center justify-between px-6 py-4 max-w-7xl mx-auto relative">
-        {/* Logo on the left */}
+    <header className="w-full bg-gradient-to-r from-[#816F68] to-[#C9C9EE] shadow-md z-50">
+      <div className="max-w-7xl mx-auto px-6 py-4 flex items-center justify-between relative">
+        
+        {/* Logo */}
         <div className="flex-shrink-0">
-          <NavLink to="/home">
+          <NavLink to="/">
             <img
-              src={bc}
+              src={logo}
               alt="onlineshop Logo"
-              className="h-12 rounded-full"
+              className="h-12 w-12 object-cover rounded-full"
             />
           </NavLink>
         </div>
 
-        {/* Navigation - absolutely centered */}
-        <div className="absolute left-1/2 transform -translate-x-1/2">
-          <ul className="flex space-x-10 text-lg font-medium text-white">
-          <li>
-              <NavLink
-                to="/home"
-                className="flex items-center space-x-2 hover:text-red-200 transition-colors duration-300"
-              >
-                <FaHome className="text-xl" />
-                <span className="text-base">Home</span>
+        {/* Navigation */}
+        <nav className="absolute left-1/2 transform -translate-x-1/2">
+          <ul className="flex space-x-8 text-white text-base font-medium">
+            <li>
+              <NavLink to="/" className="flex items-center gap-1 hover:text-red-200 transition-colors duration-300">
+                <FaHome className="text-lg" />
+                <span>Home</span>
               </NavLink>
             </li>
             <li>
-              <NavLink
-                to="/item"
-                className="flex items-center space-x-2 hover:text-red-200 transition-colors duration-300"
-              >
-                <FaBasketShopping className="text-xl" />
-                <span className="text-base">Shop</span>
+              <NavLink to="/shop" className="flex items-center gap-1 hover:text-red-200 transition-colors duration-300">
+                <FaBasketShopping className="text-lg" />
+                <span>Shop</span>
               </NavLink>
             </li>
             <li>
-              <NavLink
-                to="/user"
-                className="flex items-center space-x-2 hover:text-red-200 transition-colors duration-300"
-              >
-                <FaCartArrowDown className="text-xl" />
-                <span className="text-base">Cart</span>
+              <NavLink to="/cart" className="flex items-center gap-1 hover:text-red-200 transition-colors duration-300">
+                <FaCartArrowDown className="text-lg" />
+                <span>Cart</span>
               </NavLink>
             </li>
             <li>
-              <NavLink
-                to="/contact-us"
-                className="flex items-center space-x-2 hover:text-red-200 transition-colors duration-300"
-              >
-                <IoMdContacts className="text-xl" />
-                <span className="text-base">Contact Us</span>
+              <NavLink to="/contact" className="flex items-center gap-1 hover:text-red-200 transition-colors duration-300">
+                <IoMdContacts className="text-lg" />
+                <span>Contact Us</span>
               </NavLink>
             </li>
             <li>
-              <NavLink
-                to="/about-us"
-                className="flex items-center space-x-2 hover:text-red-200 transition-colors duration-300"
-              >
-                <FaInfo className="text-xl" />
-                <span className="text-base">About Us</span>
+              <NavLink to="/Mabout" className="flex items-center gap-1 hover:text-red-200 transition-colors duration-300">
+                <FaInfo className="text-lg" />
+                <span>About Us</span>
               </NavLink>
             </li>
           </ul>
-        </div>
+        </nav>
 
-        {/* Hamburger on the right */}
+        {/* User Dropdown or Login */}
         <div className="flex-shrink-0">
-          <button className="text-3xl text-white hover:text-red-200">
-            <FiMenu />
-          </button>
+          {isAuthenticated ? (
+            <div className="flex items-center gap-2">
+              <span className="text-white font-semibold max-w-[120px] truncate">
+                {userName}
+              </span>
+              <Dropdown menu={{ items: menuItems }} trigger={["click"]} placement="bottomRight">
+                <Button className="bg-[#fffc4a] text-white hover:bg-[#3a48c6] border-none px-4 py-2 rounded-md">
+                  <Space>
+                    <FiMenu className="text-black text-lg" />
+                    <DownOutlined className="text-black" />
+                  </Space>
+                </Button>
+              </Dropdown>
+            </div>
+          ) : (
+            <Link
+              to="/login"
+              className="bg-[#816F68] text-white px-4 py-2 rounded-md hover:bg-[#9f9fc9] transition duration-300"
+            >
+              Login
+            </Link>
+          )}
         </div>
       </div>
-    </div>
+    </header>
   );
 };
 

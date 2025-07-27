@@ -1,84 +1,80 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from "react";
+import { NavLink } from "react-router-dom"; // ✅ Added this line
 import bc from "../../assets/images/bc.jpg";
-import { FaArrowLeft, FaArrowRight } from "react-icons/fa"; // For the arrows
+import bc2 from "../../assets/images/bc2.jpg";
+
+const images = [bc, bc2, bc, bc2, bc];
 
 const ItemCard = () => {
-  const images = [bc, bc, bc, bc]; // Array of images for the carousel
-  const titles = ["Smoking Nun", "Smoking Sun", "Smoking Gun", "Smoking Run"]; 
-  const description=["A spiritual journey captured in the perfect blend of smoke and serenity. The Smoking Nun is a tribute to divine mysteries wrapped in a veil of elegance.","The ethereal glow of the Smoking Sun evokes a sense of warmth and mystique. Experience the fusion of nature's beauty and celestial smoke.","A powerful symbol of action and intensity. The Smoking Gun brings a sense of urgency and drama, leaving a trail of intrigue and suspense.","A thrilling chase where smoke and speed collide. The Smoking Run captures the essence of movement, energy, and the rush of adrenaline."]// Titles for the cards
-  const [currentIndex, setCurrentIndex] = useState(0);
+  const [index, setIndex] = useState(0);
+  const carouselRef = useRef(null);
 
-  // Auto-slide logic using useEffect
   useEffect(() => {
-    const timer = setInterval(() => {
-      setCurrentIndex((prevIndex) => (prevIndex + 1) % images.length);
-    }, 3000); // Change slide every 3 seconds
+    const interval = setInterval(() => {
+      setIndex((prev) => (prev + 1) % images.length);
+    }, 3000);
+    return () => clearInterval(interval);
+  }, []);
 
-    return () => clearInterval(timer); // Clean up the timer when the component is unmounted
-  }, [images.length]); // Dependency on images.length
-
-  const nextSlide = () => {
-    setCurrentIndex((prevIndex) => (prevIndex + 1) % images.length);
-  };
-
-  const prevSlide = () => {
-    setCurrentIndex((prevIndex) => (prevIndex - 1 + images.length) % images.length);
-  };
+  useEffect(() => {
+    if (carouselRef.current) {
+      carouselRef.current.scrollTo({
+        left: 1000 * index,
+        behavior: "smooth",
+      });
+    }
+  }, [index]);
 
   return (
-    <>
-      <h1 className="text-4xl bg-[#3C3D37] text-white font-bold text-center ">LETS SHOP AWAY!</h1> 
+    <div className="bg-[#9F838C] text-white flex flex-col items-center justify-center min-h-auto">
+      <h2 className="text-5xl font-bold text-center text-[#003249] mb-6 mt-13">
+        Featured Collections
+      </h2>
 
-      <div className="relative flex justify-center items-center bg-[#3C3D37] py-20">
-        {/* Carousel Container */}
-        <div className="flex overflow-hidden max-w-full">
-          {/* Cards */}
-          <div className="flex transition-transform duration-500 ease-in-out" style={{ transform: `translateX(-${currentIndex * 100}%)` }}>
-            {images.map((image, index) => (
-              <div key={index} className="flex-shrink-0 w-full px-4">
-                {/* Item Card */}
-                <div className="bg-[#545851] p-4 rounded-lg shadow-lg max-w-xs mx-auto">
-                  <div className="flex flex-col items-center justify-center">
-                    {/* Product Image */}
-                    <img
-                      src={image}
-                      alt={`Product ${index + 1}`}
-                      className="h-60 w-full object-cover rounded-lg mb-4"
-                    />
+      {/* Carousel Container */}
+      <div
+        ref={carouselRef}
+        className="w-[1000px] h-[500px] overflow-hidden relative whitespace-nowrap rounded-lg shadow-2xl border border-gray-700"
+      >
+        <div className="flex w-max h-full">
+          {images.map((img, i) => (
+            <div
+              key={i}
+              className="w-[1000px] h-[500px] flex-shrink-0 relative group"
+            >
+              <img
+                src={img}
+                alt={`Frame ${i}`}
+                className="w-full h-full object-cover"
+              />
 
-                    {/* Product Name */}
-                    <h1 className="text-gray-300 text-xl font-semibold text-center">
-                      {titles[index]}
-                    </h1>
-                    <p className="text-gray-300 text-sm font- text-center">
-                        {description[index]}
-                    </p>
-                  </div>
-                </div>
+              {/* Full Blur Overlay */}
+              <div className="absolute inset-0 bg-white/10 backdrop-blur-md flex items-center justify-center opacity-0 group-hover:opacity-100 transition duration-300">
+                <NavLink
+                  to="/shop"
+                  className="px-6 py-2 bg-white bg-opacity-90 text-black rounded-full font-semibold shadow-md hover:bg-opacity-100 transition"
+                >
+                  Shop Now
+                </NavLink>
               </div>
-            ))}
-          </div>
+            </div>
+          ))}
         </div>
-
-        {/* Left Arrow */}
-        <button
-          onClick={prevSlide}
-          className="absolute left-4 top-1/2 transform -translate-y-1/2 bg-white/70 hover:bg-white text-black p-2 rounded-full shadow-md"
-          aria-label="Previous slide"
-        >
-          <FaArrowLeft />
-        </button>
-
-        {/* Right Arrow */}
-        <button
-          onClick={nextSlide}
-          className="absolute right-4 top-1/2 transform -translate-y-1/2 bg-white/70 hover:bg-white text-black p-2 rounded-full shadow-md"
-          aria-label="Next slide"
-        >
-          <FaArrowRight />
-        </button>
       </div>
-    </>
+
+      {/* Film Strip Dots */}
+      <div className="flex space-x-2 mt-4 mb-13">
+        {images.map((_, i) => (
+          <button
+            key={i}
+            onClick={() => setIndex(i)}
+            className={`w-3 h-3 rounded-full ${
+              i === index ? "bg-white" : "bg-gray-500"
+            }`}
+          ></button>
+        ))}
+      </div>
+    </div>
   );
 };
 
