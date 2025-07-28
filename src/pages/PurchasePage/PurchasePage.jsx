@@ -19,7 +19,9 @@ const PurchasePage = () => {
   useEffect(() => {
     const getProductById = async () => {
       try {
-        const res = await API.get(`http://localhost:8000/api/v1/get/${currentId}`);
+        const res = await API.get(
+          `http://localhost:5000/api/v1/get/${currentId}`
+        );
         setSingleProduct(res.data.data);
         setQuantity(1); // reset quantity when product changes
       } catch (error) {
@@ -35,7 +37,7 @@ const PurchasePage = () => {
   useEffect(() => {
     const fetchProducts = async () => {
       try {
-        const res = await API.get("http://localhost:8000/api/v1/all/products");
+        const res = await API.get("http://localhost:5000/api/v1/all/products");
         setProducts(res.data.data);
       } catch (error) {
         console.error("Failed to fetch products:", error);
@@ -69,14 +71,18 @@ const PurchasePage = () => {
         items: [{ productId: currentId, quantity }],
       };
 
-      const res = await API.post("http://localhost:8000/api/v1/add-to-cart", payload);
+      const res = await API.post(
+        "http://localhost:5000/api/v1/add-to-cart",
+        payload
+      );
 
       toast.success("Product added to cart!");
       console.log("Add to cart response:", res.data);
     } catch (error) {
       console.error("Error adding to cart:", error);
       const errorMsg =
-        error.response?.data?.message || "Something went wrong while adding to cart.";
+        error.response?.data?.message ||
+        "Something went wrong while adding to cart.";
       toast.error(errorMsg);
     }
   };
@@ -87,7 +93,9 @@ const PurchasePage = () => {
 
     // Swap logic:
     // Remove clickedProduct from products list, add singleProduct back
-    const filteredProducts = products.filter((p) => p._id !== clickedProduct._id);
+    const filteredProducts = products.filter(
+      (p) => p._id !== clickedProduct._id
+    );
     const newProducts = [...filteredProducts, singleProduct];
 
     setProducts(newProducts);
@@ -104,16 +112,24 @@ const PurchasePage = () => {
           {singleProduct ? (
             <>
               <img
-                src={`http://localhost:8000/gallery/${singleProduct.productImage}`}
+                src={`http://localhost:5000/uploads/${singleProduct.productImage}`}
                 alt={singleProduct.productName}
                 className="w-full max-w-sm h-90 object-cover rounded-xl flex-shrink-0"
               />
 
               <div className="flex-1 flex flex-col justify-center items-center space-y-4 text-center">
-                <h2 className="text-3xl font-semibold">{singleProduct.productName}</h2>
-                <p className="text-sm text-gray-500 italic">{singleProduct.brandName}</p>
-                <p className="text-gray-700 text-lg">Rs.{singleProduct.productPrice}</p>
-                <p className="text-sm text-gray-500">In Stock: {singleProduct.stock}</p>
+                <h2 className="text-3xl font-semibold">
+                  {singleProduct.productName}
+                </h2>
+                <p className="text-sm text-gray-500 italic">
+                  {singleProduct.brandName}
+                </p>
+                <p className="text-gray-700 text-lg">
+                  Rs.{singleProduct.productPrice}
+                </p>
+                <p className="text-sm text-gray-500">
+                  In Stock: {singleProduct.stock}
+                </p>
 
                 <div className="flex items-center space-x-4">
                   <span className="font-semibold">Quantity:</span>
@@ -178,9 +194,13 @@ const PurchasePage = () => {
                       alt={product.productName}
                       className="w-full h-48 object-cover rounded-lg mb-2"
                     />
-                    <h4 className="font-semibold text-lg">{product.productName}</h4>
+                    <h4 className="font-semibold text-lg">
+                      {product.productName}
+                    </h4>
                     <p className="text-gray-500 text-sm">{product.brandName}</p>
-                    <p className="text-black font-bold mt-1">Rs.{product.productPrice}</p>
+                    <p className="text-black font-bold mt-1">
+                      Rs.{product.productPrice}
+                    </p>
                   </div>
                 ))}
             </div>

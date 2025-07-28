@@ -5,7 +5,12 @@ import Header from "../../components/Header/Header";
 import Footer from "../../components/Footer/Footer";
 
 // Combined insertion sort & price filter function
-const insertionSortWithPriceFilter = (arr, order = "asc", minPrice = 0, maxPrice = Infinity) => {
+const insertionSortWithPriceFilter = (
+  arr,
+  order = "asc",
+  minPrice = 0,
+  maxPrice = Infinity
+) => {
   const filteredSortedArr = [];
 
   const min = parseFloat(minPrice) || 0;
@@ -47,7 +52,9 @@ const Shop = () => {
   useEffect(() => {
     const fetchProducts = async () => {
       try {
-        const res = await axios.get("http://localhost:8000/api/v1/all/products");
+        const res = await axios.get(
+          "http://localhost:5000/api/v1/all/products"
+        );
         setProducts(res.data.data);
       } catch (error) {
         console.error("Failed to fetch products:", error);
@@ -72,7 +79,12 @@ const Shop = () => {
   // Step 2 & 3: filter by price AND sort by price (if needed) in one combined function
   if (sortOrder === "low-to-high" || sortOrder === "high-to-low") {
     const order = sortOrder === "low-to-high" ? "asc" : "desc";
-    filteredProducts = insertionSortWithPriceFilter(filteredProducts, order, minPrice, maxPrice);
+    filteredProducts = insertionSortWithPriceFilter(
+      filteredProducts,
+      order,
+      minPrice,
+      maxPrice
+    );
   } else {
     // If no sorting, just filter by price alone
     const min = parseFloat(minPrice) || 0;
@@ -159,14 +171,18 @@ const Shop = () => {
                 >
                   <div className="w-full h-60 overflow-hidden">
                     <img
-                      src={`http://localhost:8000/gallery/${product.productImage}`}
+                      src={`http://localhost:5000/uploads/${product.productImage}`}
                       alt={product.productName}
                       className="w-full h-full object-cover transform group-hover:scale-105 transition duration-300"
                     />
                   </div>
                   <div className="p-4">
-                    <h3 className="text-lg font-medium">{product.productName}</h3>
-                    <p className="text-gray-600 mb-1">Rs.{product.productPrice}</p>
+                    <h3 className="text-lg font-medium">
+                      {product.productName}
+                    </h3>
+                    <p className="text-gray-600 mb-1">
+                      Rs.{product.productPrice}
+                    </p>
                     <p className="text-sm text-gray-500">
                       In Stock: {product.stock}
                     </p>

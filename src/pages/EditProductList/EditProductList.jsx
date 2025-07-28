@@ -1,7 +1,7 @@
-import { useEffect, useState } from 'react';
-import axios from 'axios';
-import { FaEdit, FaTrash } from 'react-icons/fa';
-import { useNavigate } from 'react-router-dom';
+import { useEffect, useState } from "react";
+import axios from "axios";
+import { FaEdit, FaTrash } from "react-icons/fa";
+import { useNavigate } from "react-router-dom";
 
 const EditProductList = () => {
   const [products, setProducts] = useState([]);
@@ -9,7 +9,7 @@ const EditProductList = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const productsPerPage = 10;
 
-  const imageURL = "http://localhost:8000/gallery";
+  const imageURL = "http://localhost:5000/uploads";
   const navigate = useNavigate();
 
   const productFields = [
@@ -20,13 +20,15 @@ const EditProductList = () => {
     { label: "Price", key: "productPrice" },
     { label: "Stock", key: "stock" },
     { label: "Image", key: "productImage" },
-    { label: "Action", key: "actions" }
+    { label: "Action", key: "actions" },
   ];
 
   useEffect(() => {
     const fetchProducts = async () => {
       try {
-        const res = await axios.get('http://localhost:8000/api/v1/all/products');
+        const res = await axios.get(
+          "http://localhost:5000/api/v1/all/products"
+        );
         setProducts(res.data.data);
       } catch (error) {
         console.error("Error fetching products:", error);
@@ -39,10 +41,11 @@ const EditProductList = () => {
   }, []);
 
   const handleDelete = async (id) => {
-    if (!window.confirm("Are you sure you want to delete this product?")) return;
+    if (!window.confirm("Are you sure you want to delete this product?"))
+      return;
     try {
-      await axios.delete(`http://localhost:8000/api/v1/delete/${id}`);
-      const updatedProducts = products.filter(p => p._id !== id);
+      await axios.delete(`http://localhost:5000/api/v1/delete/${id}`);
+      const updatedProducts = products.filter((p) => p._id !== id);
       setProducts(updatedProducts);
       // Adjust page if current page exceeds new total pages
       const totalPages = Math.ceil(updatedProducts.length / productsPerPage);
@@ -57,9 +60,11 @@ const EditProductList = () => {
   // Pagination Logic
   const indexOfLastProduct = currentPage * productsPerPage;
   const indexOfFirstProduct = indexOfLastProduct - productsPerPage;
-  const currentProducts = products.slice(indexOfFirstProduct, indexOfLastProduct);
+  const currentProducts = products.slice(
+    indexOfFirstProduct,
+    indexOfLastProduct
+  );
   const totalPages = Math.ceil(products.length / productsPerPage);
-  
 
   const paginate = (pageNumber) => setCurrentPage(pageNumber);
 
@@ -74,7 +79,9 @@ const EditProductList = () => {
               <thead className="bg-gray-100 text-xs uppercase">
                 <tr>
                   {productFields.map((field, index) => (
-                    <th key={index} className="px-6 py-4">{field.label}</th>
+                    <th key={index} className="px-6 py-4">
+                      {field.label}
+                    </th>
                   ))}
                 </tr>
               </thead>
@@ -96,7 +103,9 @@ const EditProductList = () => {
                         ) : field.key === "actions" ? (
                           <div className="flex gap-3 text-lg">
                             <button
-                              onClick={() => navigate(`/editProduct/${product._id}`)}
+                              onClick={() =>
+                                navigate(`/editProduct/${product._id}`)
+                              }
                               className="text-blue-500 hover:text-blue-700"
                             >
                               <FaEdit />
@@ -120,22 +129,21 @@ const EditProductList = () => {
           </div>
 
           {/* Pagination Controls */}
-         <div className="fixed bottom-4 left-1/2 transform -translate-x-1/2 z-50 flex space-x-2">
-  {Array.from({ length: totalPages }, (_, i) => (
-    <button
-      key={i + 1}
-      onClick={() => paginate(i + 1)}
-      className={`px-3 py-1 border rounded ${
-        currentPage === i + 1
-          ? "bg-blue-500 text-white"
-          : "bg-white text-gray-700 hover:bg-blue-100"
-      }`}
-    >
-      {i + 1}
-    </button>
-  ))}
-</div>
-
+          <div className="fixed bottom-4 left-1/2 transform -translate-x-1/2 z-50 flex space-x-2">
+            {Array.from({ length: totalPages }, (_, i) => (
+              <button
+                key={i + 1}
+                onClick={() => paginate(i + 1)}
+                className={`px-3 py-1 border rounded ${
+                  currentPage === i + 1
+                    ? "bg-blue-500 text-white"
+                    : "bg-white text-gray-700 hover:bg-blue-100"
+                }`}
+              >
+                {i + 1}
+              </button>
+            ))}
+          </div>
         </>
       )}
     </div>

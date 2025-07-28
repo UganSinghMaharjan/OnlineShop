@@ -11,7 +11,9 @@ const HomeAni = () => {
     // Fetch products from API
     const fetchProducts = async () => {
       try {
-        const res = await axios.get("http://localhost:8000/api/v1/all/products");
+        const res = await axios.get(
+          "http://localhost:5000/api/v1/all/products"
+        );
         setProducts(res.data.data);
       } catch (error) {
         console.error("Failed to fetch products:", error);
@@ -21,23 +23,22 @@ const HomeAni = () => {
   }, []);
 
   useEffect(() => {
-  if (products.length === 0) return;
+    if (products.length === 0) return;
 
-  const carouselWidth = carouselRef.current.scrollWidth / 2; // because duplicated
+    const carouselWidth = carouselRef.current.scrollWidth / 2; // because duplicated
 
-  controls.start({
-    x: [0, -carouselWidth],
-    transition: {
-      x: {
-        repeat: Infinity,
-        repeatType: "loop",
-        duration: 25,
-        ease: "linear",
+    controls.start({
+      x: [0, -carouselWidth],
+      transition: {
+        x: {
+          repeat: Infinity,
+          repeatType: "loop",
+          duration: 25,
+          ease: "linear",
+        },
       },
-    },
-  });
-}, [products, controls]);
-
+    });
+  }, [products, controls]);
 
   if (products.length === 0) {
     return (
@@ -52,20 +53,12 @@ const HomeAni = () => {
 
   return (
     <>
-    
       <h2 className="text-4xl mt-7 font-bold text-white mb-8 ">
         ✨ Shop Highlights
       </h2>
 
-      <div
-        className="relative w-full max-w-7xl overflow-hidden"
-        
-      >
-        <motion.div
-          ref={carouselRef}
-          animate={controls}
-          className="flex w-max"
-        >
+      <div className="relative w-full max-w-7xl overflow-hidden">
+        <motion.div ref={carouselRef} animate={controls} className="flex w-max">
           {duplicatedProducts.map((product, i) => (
             <motion.div
               key={product._id + "-" + i}
@@ -82,7 +75,6 @@ const HomeAni = () => {
           ))}
         </motion.div>
       </div>
-    
     </>
   );
 };

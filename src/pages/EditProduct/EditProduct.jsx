@@ -1,20 +1,20 @@
-import React, { useEffect, useState } from 'react';
-import axios from 'axios';
-import { useNavigate, useParams } from 'react-router-dom';
+import React, { useEffect, useState } from "react";
+import axios from "axios";
+import { useNavigate, useParams } from "react-router-dom";
 
 const EditProduct = () => {
   const [product, setProduct] = useState({
-    productName: '',
-    productPrice: '',
-    stock: '',
-    brand: '',
-    category: '',
+    productName: "",
+    productPrice: "",
+    stock: "",
+    brand: "",
+    category: "",
   });
 
   const [productImage, setProductImage] = useState(null);
-  const [productImagePreview, setProductImagePreview] = useState('');
+  const [productImagePreview, setProductImagePreview] = useState("");
   const [isLoading, setIsLoading] = useState(false);
-  const [message, setMessage] = useState('');
+  const [message, setMessage] = useState("");
   const { id } = useParams();
   const navigate = useNavigate();
 
@@ -22,11 +22,15 @@ const EditProduct = () => {
   useEffect(() => {
     const fetchProduct = async () => {
       try {
-        const response = await axios.get(`http://localhost:8000/api/v1/get/${id}`);
+        const response = await axios.get(
+          `http://localhost:5000/api/v1/get/${id}`
+        );
         setProduct(response.data.data);
-        setProductImagePreview(`http://localhost:8000/gallery/${response.data.data.productImage}`);
+        setProductImagePreview(
+          `http://localhost:8000/gallery/${response.data.data.productImage}`
+        );
       } catch (error) {
-        setMessage('Error fetching product details');
+        setMessage("Error fetching product details");
       }
     };
 
@@ -60,37 +64,37 @@ const EditProduct = () => {
     e.preventDefault();
 
     const formData = new FormData();
-    formData.append('productName', product.productName);
-    formData.append('productPrice', product.productPrice);
-    formData.append('stock', product.stock);
-    formData.append('brand', product.brand);
-    formData.append('category', product.category);
+    formData.append("productName", product.productName);
+    formData.append("productPrice", product.productPrice);
+    formData.append("stock", product.stock);
+    formData.append("brand", product.brand);
+    formData.append("category", product.category);
     if (productImage) {
-      formData.append('productImage', productImage);
+      formData.append("productImage", productImage);
     }
 
     setIsLoading(true);
-    setMessage('');
+    setMessage("");
 
     try {
       const res = await axios.put(
-        `http://localhost:8000/api/v1/edit/product/${id}`,
+        `http://localhost:5000/api/v1/edit/product/${id}`,
         formData,
         {
           headers: {
-            'Content-Type': 'multipart/form-data',
+            "Content-Type": "multipart/form-data",
           },
         }
       );
 
       // Success message
-      setMessage('🎉 Product updated successfully!');
+      setMessage("🎉 Product updated successfully!");
       // Redirect to the product list page
-    //   navigate('/EditProductlist'); // Navigate to EditProductlist
-    navigate("/admin", { state: { selectedKey: "4" } });
+      //   navigate('/EditProductlist'); // Navigate to EditProductlist
+      navigate("/admin", { state: { selectedKey: "4" } });
     } catch (error) {
       // Error message
-      setMessage('❌ Failed to update product.');
+      setMessage("❌ Failed to update product.");
     } finally {
       setIsLoading(false);
     }
@@ -100,16 +104,20 @@ const EditProduct = () => {
     <div className="min-h-screen p-10 w-[80%] text-[#816F68] font-sans">
       <div className="max-w-xl mx-auto bg-white p-8 rounded-2xl shadow-lg">
         <h2 className="text-3xl font-bold mb-6 text-[#8D7471]">Edit Product</h2>
-        
+
         {/* Display success or error message */}
         {message && (
-          <div className="mb-4 text-center font-medium text-green-600">{message}</div>
+          <div className="mb-4 text-center font-medium text-green-600">
+            {message}
+          </div>
         )}
 
         {/* Form to edit product */}
         <form onSubmit={handleSubmit} className="space-y-5">
           <div>
-            <label className="block mb-1 text-sm font-semibold">Product Name</label>
+            <label className="block mb-1 text-sm font-semibold">
+              Product Name
+            </label>
             <input
               type="text"
               name="productName"
@@ -122,7 +130,9 @@ const EditProduct = () => {
           </div>
 
           <div>
-            <label className="block mb-1 text-sm font-semibold">Price (Rs.)</label>
+            <label className="block mb-1 text-sm font-semibold">
+              Price (Rs.)
+            </label>
             <input
               type="number"
               name="productPrice"
@@ -174,7 +184,9 @@ const EditProduct = () => {
           </div>
 
           <div>
-            <label className="block mb-1 text-sm font-semibold">Upload Product Image</label>
+            <label className="block mb-1 text-sm font-semibold">
+              Upload Product Image
+            </label>
             <input
               type="file"
               accept="image/*"
@@ -199,14 +211,30 @@ const EditProduct = () => {
           >
             {isLoading ? (
               <>
-                <svg className="animate-spin h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
-                  <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" />
-                  <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v8H4z" />
+                <svg
+                  className="animate-spin h-5 w-5 text-white"
+                  xmlns="http://www.w3.org/2000/svg"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                >
+                  <circle
+                    className="opacity-25"
+                    cx="12"
+                    cy="12"
+                    r="10"
+                    stroke="currentColor"
+                    strokeWidth="4"
+                  />
+                  <path
+                    className="opacity-75"
+                    fill="currentColor"
+                    d="M4 12a8 8 0 018-8v8H4z"
+                  />
                 </svg>
                 Uploading...
               </>
             ) : (
-              'Update Product'
+              "Update Product"
             )}
           </button>
         </form>
