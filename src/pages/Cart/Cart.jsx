@@ -24,7 +24,7 @@ const Cart = () => {
           name: item.productId.productName,
           price: item.productId.productPrice,
           quantity: item.quantity,
-          image: `http://localhost:5000/gallery/${item.productId.productImage}`,
+          image: `http://localhost:5000/uploads/${item.productId.productImage}`,
         }));
         setCartItems(items);
       } catch (error) {
@@ -47,7 +47,7 @@ const Cart = () => {
     try {
       const res = await API.post(
         "http://localhost:5000/api/v1/add-to-order",
-        {},
+        { userId },
         {
           headers: {
             Authorization: `Bearer ${token}`,

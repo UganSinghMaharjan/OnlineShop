@@ -27,7 +27,7 @@ const EditProduct = () => {
         );
         setProduct(response.data.data);
         setProductImagePreview(
-          `http://localhost:8000/gallery/${response.data.data.productImage}`
+          `http://localhost:5000/uploads/${response.data.data.productImage}`
         );
       } catch (error) {
         setMessage("Error fetching product details");
