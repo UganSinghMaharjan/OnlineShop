@@ -15,9 +15,9 @@ import Dashboard from "../../pages/Dashboard/Dashboard";
 import CustomHeader from "../CustomHeader/CustomHeader";
 import AddProducts from "../../pages/AddProducts/AddProducts";
 import User from "../../pages/User/User";
-import Settings from "../../pages/Settings/Settings";
 import EditProductList from "../../pages/EditProductList/EditProductList";
 import { setLogout } from "../../redux/features/authSlice/authSlice";
+import logo from "../../assets/images/logo.png";
 
 const { Header: AntHeader, Content, Sider } = Layout;
 const siderWidth = 260;
@@ -41,7 +41,7 @@ const Admin = () => {
   const handleMenuClick = (e) => {
     const { key } = e;
 
-    if (key === "6") {
+    if (key === "5") {
       handleLogout();
     } else {
       setSelectedKey(key);
@@ -64,14 +64,26 @@ const Admin = () => {
       >
         <div
           style={{
-            color: "white",
-            padding: "24px 20px 12px",
-            fontWeight: "bold",
-            fontSize: "20px",
+            display: "flex",
+            justifyContent: "center",
+            alignItems: "center",
+            padding: "20px 0",
           }}
         >
-          PandaWagon Admin
+          <img
+            src={logo}
+            alt="Logo"
+            style={{
+              width: "60px",
+              height: "60px",
+              borderRadius: "50%",
+              objectFit: "cover",
+              backgroundColor: "#fff", // optional: gives it a white border background
+              padding: "4px", // optional: adds padding inside the circle
+            }}
+          />
         </div>
+
         <Menu
           theme="dark"
           mode="inline"
@@ -94,10 +106,7 @@ const Admin = () => {
           <Menu.Item key="4" icon={<EditOutlined />}>
             Edit Products List
           </Menu.Item>
-          <Menu.Item key="5" icon={<SettingOutlined />}>
-            Settings
-          </Menu.Item>
-          <Menu.Item key="6" icon={<LogoutOutlined />}>
+          <Menu.Item key="5" icon={<LogoutOutlined />}>
             Log Out
           </Menu.Item>
         </Menu>
@@ -138,8 +147,8 @@ const Admin = () => {
           {selectedKey === "2" && <User />}
           {selectedKey === "3" && <AddProducts />}
           {selectedKey === "4" && <EditProductList />}
-          {selectedKey === "5" && <Settings />}
-          {selectedKey === "6" && (
+
+          {selectedKey === "5" && (
             <div className="w-full h-full flex items-center justify-center text-red-500 text-xl font-semibold">
               Logged out successfully!
             </div>
