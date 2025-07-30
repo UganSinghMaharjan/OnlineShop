@@ -20,7 +20,7 @@ const User = () => {
   }, []);
 
   return (
-    <div className="min-h-screen p-10 w-[80%] text-[#816F68] font-sans">
+    <div className="min-h-screen p-10 w-[80%] text-[#1C1C1C] font-sans">
       <h2 className="text-3xl font-bold mb-6 text-[#8D7471] text-center">
         User Directory
       </h2>
@@ -28,10 +28,10 @@ const User = () => {
         <table className="min-w-full bg-white rounded-2xl shadow-lg overflow-hidden">
           <thead className="bg-[#C9C9EE] text-left">
             <tr>
-              <th className="px-6 py-3 text-sm text-[#816F68]">Name</th>
-              <th className="px-6 py-3 text-sm text-[#816F68]">Email</th>
-              <th className="px-6 py-3 text-sm text-[#816F68]">Role</th>
-              <th className="px-6 py-3 text-sm text-[#816F68]">Joined</th>
+              <th className="px-6 py-3 text-sm text-[#1C1C1C]">Name</th>
+              <th className="px-6 py-3 text-sm text-[#1C1C1C]">Email</th>
+              <th className="px-6 py-3 text-sm text-[#1C1C1C]">Role</th>
+              <th className="px-6 py-3 text-sm text-[#1C1C1C]">Joined</th>
             </tr>
           </thead>
           <tbody>
@@ -42,7 +42,7 @@ const User = () => {
                 </td>
                 <td className="px-6 py-4 text-[#9F838C]">{user.email}</td>
                 <td className="px-6 py-4 text-[#9F838C]">{user.role}</td>
-                <td className="px-6 py-4 text-[#816F68]">
+                <td className="px-6 py-4 text-[#1C1C1C]">
                   {user.createdAt
                     ? new Date(user.createdAt).toLocaleDateString("en-US", {
                         year: "numeric",

@@ -63,6 +63,26 @@ const Cart = () => {
       toast.error("Failed to place order. Try again.");
     }
   };
+  const handleRemoveItem = async (productId) => {
+    try {
+      await API.delete(
+        `http://localhost:5000/api/v1/cart/${userId}/item/${productId}`,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+
+      toast.success("Item removed from cart.");
+      setCartItems((prevItems) =>
+        prevItems.filter((item) => item.id !== productId)
+      );
+    } catch (error) {
+      console.error("Failed to remove item:", error);
+      toast.error("Could not remove item. Try again.");
+    }
+  };
 
   const handleConfirmClick = () => {
     setConfirmingCheckout(true);
@@ -116,7 +136,10 @@ const Cart = () => {
                   </p>
                 </div>
               </div>
-              <button className="px-4 py-2 bg-red-100 text-red-600 rounded-xl hover:bg-red-200 transition">
+              <button
+                onClick={() => handleRemoveItem(item.id)}
+                className="px-4 py-2 bg-red-100 text-red-600 rounded-xl hover:bg-red-200 transition"
+              >
                 Remove
               </button>
             </div>

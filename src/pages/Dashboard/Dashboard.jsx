@@ -1,4 +1,4 @@
-import React from 'react';
+import React from "react";
 
 const Dashboard = () => {
   const stats = [
@@ -9,7 +9,7 @@ const Dashboard = () => {
   ];
 
   return (
-    <div className=" p-8 min-h-screen text-[#816F68] font-sans w-[80%]">
+    <div className=" p-8 min-h-screen text-[#1C1C1C] font-sans w-[80%]">
       {/* Header */}
       <h1 className="text-4xl font-extrabold text-[#8D7471] mb-4">
         Welcome Back, Admin!
@@ -25,8 +25,10 @@ const Dashboard = () => {
             key={index}
             className="bg-white rounded-2xl p-6 shadow-lg flex flex-col justify-between"
           >
-            <h2 className="text-[#816F68] text-lg">{stat.title}</h2>
-            <p className="text-3xl font-semibold text-[#8D7471]">{stat.value}</p>
+            <h2 className="text-[#1C1C1C] text-lg">{stat.title}</h2>
+            <p className="text-3xl font-semibold text-[#8D7471]">
+              {stat.value}
+            </p>
           </div>
         ))}
       </div>
@@ -36,7 +38,7 @@ const Dashboard = () => {
         <h2 className="text-xl font-semibold text-[#8D7471] mb-4">
           Recent Activity
         </h2>
-        <div className="h-48 bg-[#C9C9EE] rounded-xl flex items-center justify-center text-[#816F68] shadow-inner">
+        <div className="h-48 bg-[#C9C9EE] rounded-xl flex items-center justify-center text-[#1C1C1C] shadow-inner">
           Chart or Table Placeholder
         </div>
       </div>
