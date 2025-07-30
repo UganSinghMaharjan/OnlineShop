@@ -31,20 +31,18 @@ const Admin = () => {
   const defaultSelectedKey = location.state?.selectedKey || "1";
   const [selectedKey, setSelectedKey] = useState(defaultSelectedKey);
 
+  const handleLogout = () => {
+    dispatch(setLogout());
+    localStorage.removeItem("user");
+    localStorage.removeItem("AccessToken");
+    window.location.href = "/";
+  };
+
   const handleMenuClick = (e) => {
     const { key } = e;
 
     if (key === "6") {
-      // 🔒 Perform logout
-      dispatch(setLogout());
-      localStorage.removeItem("user");
-      localStorage.removeItem("AccessToken");
-
-      // Show logout screen briefly then redirect
-      setSelectedKey(key);
-      setTimeout(() => {
-        navigate("/");
-      }, 1000);
+      handleLogout();
     } else {
       setSelectedKey(key);
     }
@@ -143,7 +141,7 @@ const Admin = () => {
           {selectedKey === "5" && <Settings />}
           {selectedKey === "6" && (
             <div className="w-full h-full flex items-center justify-center text-red-500 text-xl font-semibold">
-              Logging out...
+              Logged out successfully!
             </div>
           )}
         </Content>

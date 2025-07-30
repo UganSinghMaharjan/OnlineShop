@@ -91,8 +91,6 @@ const PurchasePage = () => {
   const handleProductSwap = (clickedProduct) => {
     if (!singleProduct) return;
 
-    // Swap logic:
-    // Remove clickedProduct from products list, add singleProduct back
     const filteredProducts = products.filter(
       (p) => p._id !== clickedProduct._id
     );
@@ -190,7 +188,7 @@ const PurchasePage = () => {
                     className="bg-white p-4 rounded-xl shadow-md flex flex-col items-center text-center cursor-pointer hover:shadow-lg transition transform hover:-translate-y-1 hover:scale-105"
                   >
                     <img
-                      src={`http://localhost:8000/gallery/${product.productImage}`}
+                      src={`http://localhost:5000/uploads/${product.productImage}`}
                       alt={product.productName}
                       className="w-full h-48 object-cover rounded-lg mb-2"
                     />

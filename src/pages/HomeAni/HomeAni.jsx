@@ -48,7 +48,6 @@ const HomeAni = () => {
     );
   }
 
-  // Duplicate products for seamless infinite scroll
   const duplicatedProducts = [...products, ...products];
 
   return (
@@ -67,7 +66,7 @@ const HomeAni = () => {
               title={product.productName}
             >
               <img
-                src={`http://localhost:8000/gallery/${product.productImage}`}
+                src={`http://localhost:5000/uploads/${product.productImage}`}
                 alt={product.productName}
                 className="w-full h-full object-cover"
               />

@@ -23,14 +23,17 @@ const ContactUs = () => {
         <div className="bg-white rounded-2xl p-6 text-center shadow-lg">
           <h2 className="text-xl font-bold text-[#8D7471] mb-2">📧 Email</h2>
           <p className="text-[#816F68]">uganmaharjan9@gmail.com</p>
+          <p className="text-[#816F68]">snehamaharjan@gmail.com</p>
         </div>
         <div className="bg-white rounded-2xl p-6 text-center shadow-lg">
           <h2 className="text-xl font-bold text-[#8D7471] mb-2">📞 Call</h2>
           <p className="text-[#816F68]">+977 9803389703</p>
+          <p className="text-[#816F68]">+977 9808828945</p>
         </div>
         <div className="bg-white rounded-2xl p-6 text-center shadow-lg">
           <h2 className="text-xl font-bold text-[#8D7471] mb-2">📍 Visit</h2>
-          <p className="text-[#816F68]">Patan Dhoka Lalitpur 44600</p>
+          <p className="text-[#816F68]">Patan Dhoka, Lalitpur </p>
+          <p className="text-[#816F68]">Chyasal, Lalitpur </p>
         </div>
       </div>
 
