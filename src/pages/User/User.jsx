@@ -1,37 +1,29 @@
-import React from 'react';
+import React, { useEffect, useState } from "react";
+import axios from "axios";
 
 const User = () => {
-  
-  const users = [
-    {
-      name: "Jane Doe",
-      email: "jane.doe@example.com",
-      role: "Customer",
-      joined: "March 2024"
-    },
-    {
-      name: "John Smith",
-      email: "john.smith@example.com",
-      role: "Admin",
-      joined: "February 2023"
-    },
-    {
-      name: "Alice Brown",
-      email: "alice.brown@example.com",
-      role: "Vendor",
-      joined: "January 2025"
-    },
-    {
-      name: "Leo White",
-      email: "leo.white@example.com",
-      role: "Customer",
-      joined: "April 2025"
-    }
-  ];
+  const [users, setUsers] = useState([]);
+
+  useEffect(() => {
+    const fetchUsers = async () => {
+      try {
+        const response = await axios.get(
+          "http://localhost:5000/api/v1/get-all-user"
+        );
+        setUsers(response.data.data); // Adjust based on actual response shape
+      } catch (error) {
+        console.error("Error fetching users:", error);
+      }
+    };
+
+    fetchUsers();
+  }, []);
 
   return (
     <div className="min-h-screen p-10 w-[80%] text-[#816F68] font-sans">
-      <h2 className="text-3xl font-bold mb-6 text-[#8D7471] text-center">User Directory</h2>
+      <h2 className="text-3xl font-bold mb-6 text-[#8D7471] text-center">
+        User Directory
+      </h2>
       <div className="overflow-x-auto">
         <table className="min-w-full bg-white rounded-2xl shadow-lg overflow-hidden">
           <thead className="bg-[#C9C9EE] text-left">
@@ -45,10 +37,20 @@ const User = () => {
           <tbody>
             {users.map((user, index) => (
               <tr key={index} className="border-t border-gray-200">
-                <td className="px-6 py-4 text-[#8D7471] font-medium">{user.name}</td>
+                <td className="px-6 py-4 text-[#8D7471] font-medium">
+                  {user.name || `${user.firstName} ${user.lastName}`}
+                </td>
                 <td className="px-6 py-4 text-[#9F838C]">{user.email}</td>
-                <td className="px-6 py-4 text-[#816F68]">{user.role}</td>
-                <td className="px-6 py-4 text-[#816F68]">{user.joined}</td>
+                <td className="px-6 py-4 text-[#9F838C]">{user.role}</td>
+                <td className="px-6 py-4 text-[#816F68]">
+                  {user.createdAt
+                    ? new Date(user.createdAt).toLocaleDateString("en-US", {
+                        year: "numeric",
+                        month: "long",
+                        day: "numeric",
+                      })
+                    : "N/A"}
+                </td>
               </tr>
             ))}
           </tbody>

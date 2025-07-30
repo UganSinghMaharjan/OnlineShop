@@ -16,13 +16,15 @@ const Cart = () => {
   useEffect(() => {
     const fetchCart = async () => {
       try {
-        const res = await API.get(`http://localhost:8000/api/v1/get-my-cart/${userId}`);
+        const res = await API.get(
+          `http://localhost:5000/api/v1/get-my-cart/${userId}`
+        );
         const items = res.data.data.items.map((item) => ({
           id: item.productId._id,
           name: item.productId.productName,
           price: item.productId.productPrice,
           quantity: item.quantity,
-          image: `http://localhost:8000/gallery/${item.productId.productImage}`,
+          image: `http://localhost:5000/uploads/${item.productId.productImage}`,
         }));
         setCartItems(items);
       } catch (error) {
@@ -36,13 +38,16 @@ const Cart = () => {
     if (userId) fetchCart();
   }, [userId]);
 
-  const total = cartItems.reduce((acc, item) => acc + item.price * item.quantity, 0);
+  const total = cartItems.reduce(
+    (acc, item) => acc + item.price * item.quantity,
+    0
+  );
 
   const handleCheckout = async () => {
     try {
       const res = await API.post(
-        "http://localhost:8000/api/v1/add-to-order",
-        {},
+        "http://localhost:5000/api/v1/add-to-order",
+        { userId },
         {
           headers: {
             Authorization: `Bearer ${token}`,
@@ -122,7 +127,9 @@ const Cart = () => {
         {!loading && cartItems.length > 0 && (
           <div className="border border-gray-200 rounded-xl p-5 text-right bg-gray-50">
             <div className="text-sm text-gray-500 mb-1">Order Total</div>
-            <h2 className="text-2xl font-semibold text-gray-800">Rs. {total.toFixed(2)}</h2>
+            <h2 className="text-2xl font-semibold text-gray-800">
+              Rs. {total.toFixed(2)}
+            </h2>
             <button
               onClick={handleConfirmClick}
               className="mt-3 px-5 py-2 bg-black text-white rounded-lg text-sm hover:bg-gray-800 transition"
@@ -137,8 +144,12 @@ const Cart = () => {
       {confirmingCheckout && (
         <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
           <div className="bg-white p-6 rounded-2xl shadow-xl text-center space-y-4 w-80">
-            <h2 className="text-lg font-semibold text-gray-800">Confirm Order?</h2>
-            <p className="text-sm text-gray-600">Are you sure you want to place this order?</p>
+            <h2 className="text-lg font-semibold text-gray-800">
+              Confirm Order?
+            </h2>
+            <p className="text-sm text-gray-600">
+              Are you sure you want to place this order?
+            </p>
             <div className="flex justify-center gap-4 mt-4">
               <button
                 onClick={handleCancel}

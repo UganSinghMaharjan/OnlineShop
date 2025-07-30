@@ -15,6 +15,7 @@
     "ant-design": "^1.0.0",
     "antd": "^5.24.7",
     "axios": "^1.9.0",
+    "bcrypt": "^6.0.0",
     "express": "^5.1.0",
     "framer-motion": "^12.12.1",
     "jsonwebtoken": "^9.0.2",
@@ -38,5 +39,18 @@
     "eslint-plugin-react-refresh": "^0.4.19",
     "globals": "^15.15.0",
     "vite": "^6.2.0"
-  }
+  },
+  "description": "This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.",
+  "main": "eslint.config.js",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/UganSinghMaharjan/OnlineShop.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/UganSinghMaharjan/OnlineShop/issues"
+  },
+  "homepage": "https://github.com/UganSinghMaharjan/OnlineShop#readme"
 }
