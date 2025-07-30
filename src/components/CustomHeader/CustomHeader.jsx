@@ -11,15 +11,11 @@ const CustomHeader = () => {
         background: "#9F838C",
         padding: "0 24px",
         display: "flex",
-        justifyContent: "space-between",
+        justifyContent: "end",
         alignItems: "center",
         boxShadow: "0 0px 0px rgba(0,0,0,0.1)",
       }}
     >
-      <Title level={4} style={{ margin: 0 }}>
-        PandaWagon Admin
-      </Title>
-
       <Space size="middle">
         <Input
           placeholder="Search..."
