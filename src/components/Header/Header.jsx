@@ -24,29 +24,11 @@ const Header = () => {
   };
 
   const menuItems = [
-  {
-    key: "1",
-    label: (
-      <Link
-        to="/profile"
-        style={{
-          display: "block",
-          padding: "8px 16px",
-          color: "#333",
-          textDecoration: "none",
-        }}
-        className="dropdown-menu-item"
-      >
-        Profile
-      </Link>
-    ),
-  },
-  {
-    key: "2",
-    label:
-      user?.role === "admin" ? (
+    {
+      key: "1",
+      label: (
         <Link
-          to="/admin-layout"
+          to="/profile"
           style={{
             display: "block",
             padding: "8px 16px",
@@ -55,68 +37,89 @@ const Header = () => {
           }}
           className="dropdown-menu-item"
         >
-          Dashboard
+          Profile
         </Link>
-      ) : (
+      ),
+    },
+    {
+      key: "2",
+      label:
+        user?.role === "admin" ? (
+          <Link
+            to="/admin-layout"
+            style={{
+              display: "block",
+              padding: "8px 16px",
+              color: "#333",
+              textDecoration: "none",
+            }}
+            className="dropdown-menu-item"
+          >
+            Dashboard
+          </Link>
+        ) : (
+          <span
+            style={{
+              display: "none",
+              padding: "8px 16px",
+              color: "#aaa",
+              cursor: "not-allowed",
+              userSelect: "none",
+            }}
+            className="dropdown-menu-item disabled"
+          >
+            Dashboard
+          </span>
+        ),
+    },
+    {
+      key: "3",
+      label: (
         <span
+          onClick={() => alert("Settings clicked!")}
           style={{
-            display: "none",
+            display: "block",
             padding: "8px 16px",
-            color: "#aaa",
-            cursor: "not-allowed",
-            userSelect: "none",
+            color: "#333",
+            cursor: "pointer",
           }}
-          className="dropdown-menu-item disabled"
+          className="dropdown-menu-item"
         >
-          Dashboard
+          Settings
         </span>
       ),
-  },
-  {
-  key: "3",
-  label: (
-    <span
-      onClick={() => alert("Settings clicked!")}
-      style={{
-        display: "block",
-        padding: "8px 16px",
-        color: "#333",
-        cursor: "pointer",
-      }}
-      className="dropdown-menu-item"
-    >
-      Settings
-    </span>
-  ),
-},
+    },
 
-  {
-    key: "4",
-    label: (
-      <span
-        onClick={handleLogout}
-        style={{
-          display: "block",
-          padding: "8px 16px",
-          color: "#d32f2f",
-          cursor: "pointer",
-          fontWeight: "600",
-          transition: "background-color 0.3s ease",
-        }}
-        className="dropdown-menu-item logout"
-        onMouseEnter={(e) => (e.currentTarget.style.backgroundColor = "#ffebee")}
-        onMouseLeave={(e) => (e.currentTarget.style.backgroundColor = "transparent")}
-      >
-        Logout
-      </span>
-    ),
-  },
-];
+    {
+      key: "4",
+      label: (
+        <span
+          onClick={handleLogout}
+          style={{
+            display: "block",
+            padding: "8px 16px",
+            color: "#d32f2f",
+            cursor: "pointer",
+            fontWeight: "600",
+            transition: "background-color 0.3s ease",
+          }}
+          className="dropdown-menu-item logout"
+          onMouseEnter={(e) =>
+            (e.currentTarget.style.backgroundColor = "#ffebee")
+          }
+          onMouseLeave={(e) =>
+            (e.currentTarget.style.backgroundColor = "transparent")
+          }
+        >
+          Logout
+        </span>
+      ),
+    },
+  ];
 
   return (
     <header className="w-full bg-gradient-to-r from-[#816F68] to-[#C9C9EE] shadow-md z-50">
       <div className="max-w-7xl mx-auto px-6 py-4 flex items-center justify-between relative">
-        
         {/* Logo */}
         <div className="flex-shrink-0">
           <NavLink to="/">
@@ -132,31 +135,46 @@ const Header = () => {
         <nav className="absolute left-1/2 transform -translate-x-1/2">
           <ul className="flex space-x-8 text-white text-base font-medium">
             <li>
-              <NavLink to="/" className="flex items-center gap-1 hover:text-red-200 transition-colors duration-300">
+              <NavLink
+                to="/"
+                className="flex items-center gap-1 hover:text-red-200 transition-colors duration-300"
+              >
                 <FaHome className="text-lg" />
                 <span>Home</span>
               </NavLink>
             </li>
             <li>
-              <NavLink to="/shop" className="flex items-center gap-1 hover:text-red-200 transition-colors duration-300">
+              <NavLink
+                to="/shop"
+                className="flex items-center gap-1 hover:text-red-200 transition-colors duration-300"
+              >
                 <FaBasketShopping className="text-lg" />
                 <span>Shop</span>
               </NavLink>
             </li>
             <li>
-              <NavLink to="/cart" className="flex items-center gap-1 hover:text-red-200 transition-colors duration-300">
+              <NavLink
+                to="/cart"
+                className="flex items-center gap-1 hover:text-red-200 transition-colors duration-300"
+              >
                 <FaCartArrowDown className="text-lg" />
                 <span>Cart</span>
               </NavLink>
             </li>
             <li>
-              <NavLink to="/contact" className="flex items-center gap-1 hover:text-red-200 transition-colors duration-300">
+              <NavLink
+                to="/contact"
+                className="flex items-center gap-1 hover:text-red-200 transition-colors duration-300"
+              >
                 <IoMdContacts className="text-lg" />
                 <span>Contact Us</span>
               </NavLink>
             </li>
             <li>
-              <NavLink to="/Mabout" className="flex items-center gap-1 hover:text-red-200 transition-colors duration-300">
+              <NavLink
+                to="/Mabout"
+                className="flex items-center gap-1 hover:text-red-200 transition-colors duration-300"
+              >
                 <FaInfo className="text-lg" />
                 <span>About Us</span>
               </NavLink>
@@ -171,7 +189,11 @@ const Header = () => {
               <span className="text-white font-semibold max-w-[120px] truncate">
                 {userName}
               </span>
-              <Dropdown menu={{ items: menuItems }} trigger={["click"]} placement="bottomRight">
+              <Dropdown
+                menu={{ items: menuItems }}
+                trigger={["click"]}
+                placement="bottomRight"
+              >
                 <Button className="bg-[#fffc4a] text-white hover:bg-[#3a48c6] border-none px-4 py-2 rounded-md">
                   <Space>
                     <FiMenu className="text-black text-lg" />

@@ -4,11 +4,11 @@ import Footer from "../Footer/Footer";
 
 const ContactUs = () => {
   return (
-    <div className="min-h-screen flex flex-col justify-between bg-[#BAABBD] text-[#816F68] font-sans">
+    <div className="min-h-screen flex flex-col justify-between bg-[#795548] text-[#1C1C1C] font-sans">
       <Header />
 
       {/* Hero div */}
-      <div className="text-center py-16 px-4 bg-[#C9C9EE] shadow-md shadow-[#816F68]/20">
+      <div className="text-center py-16 px-4 bg-[#C9C9EE] shadow-md shadow-[#1C1C1C]/20">
         <h1 className="text-5xl font-extrabold text-[#8D7471] mb-4">
           Let’s Connect
         </h1>
@@ -22,18 +22,18 @@ const ContactUs = () => {
       <div className="grid gap-8 md:grid-cols-3 px-6 py-12 w-11/12 md:w-4/5 mx-auto">
         <div className="bg-white rounded-2xl p-6 text-center shadow-lg">
           <h2 className="text-xl font-bold text-[#8D7471] mb-2">📧 Email</h2>
-          <p className="text-[#816F68]">uganmaharjan9@gmail.com</p>
-          <p className="text-[#816F68]">snehamaharjan@gmail.com</p>
+          <p className="text-[#1C1C1C]">uganmaharjan9@gmail.com</p>
+          <p className="text-[#1C1C1C]">snehamaharjan@gmail.com</p>
         </div>
         <div className="bg-white rounded-2xl p-6 text-center shadow-lg">
           <h2 className="text-xl font-bold text-[#8D7471] mb-2">📞 Call</h2>
-          <p className="text-[#816F68]">+977 9803389703</p>
-          <p className="text-[#816F68]">+977 9808828945</p>
+          <p className="text-[#1C1C1C]">+977 9803389703</p>
+          <p className="text-[#1C1C1C]">+977 9808828945</p>
         </div>
         <div className="bg-white rounded-2xl p-6 text-center shadow-lg">
           <h2 className="text-xl font-bold text-[#8D7471] mb-2">📍 Visit</h2>
-          <p className="text-[#816F68]">Patan Dhoka, Lalitpur </p>
-          <p className="text-[#816F68]">Chyasal, Lalitpur </p>
+          <p className="text-[#1C1C1C]">Patan Dhoka, Lalitpur </p>
+          <p className="text-[#1C1C1C]">Chyasal, Lalitpur </p>
         </div>
       </div>
 
@@ -49,7 +49,7 @@ const ContactUs = () => {
             <label className="block mb-2 text-white font-medium">Name</label>
             <input
               type="text"
-              className="w-full px-4 py-3 rounded-lg bg-white border border-[#9F838C] text-[#816F68] focus:outline-none focus:ring-2 focus:ring-white"
+              className="w-full px-4 py-3 rounded-lg bg-white border border-[#9F838C] text-[#1C1C1C] focus:outline-none focus:ring-2 focus:ring-white"
               placeholder="Your name"
             />
           </div>
@@ -58,7 +58,7 @@ const ContactUs = () => {
             <label className="block mb-2 text-white font-medium">Email</label>
             <input
               type="email"
-              className="w-full px-4 py-3 rounded-lg bg-white border border-[#9F838C] text-[#816F68] focus:outline-none focus:ring-2 focus:ring-white"
+              className="w-full px-4 py-3 rounded-lg bg-white border border-[#9F838C] text-[#1C1C1C] focus:outline-none focus:ring-2 focus:ring-white"
               placeholder="you@example.com"
             />
           </div>
@@ -67,7 +67,7 @@ const ContactUs = () => {
             <label className="block mb-2 text-white font-medium">Message</label>
             <textarea
               rows="5"
-              className="w-full px-4 py-3 rounded-lg bg-white border border-[#9F838C] text-[#816F68] focus:outline-none focus:ring-2 focus:ring-white"
+              className="w-full px-4 py-3 rounded-lg bg-white border border-[#9F838C] text-[#1C1C1C] focus:outline-none focus:ring-2 focus:ring-white"
               placeholder="Share your thoughts..."
             ></textarea>
           </div>

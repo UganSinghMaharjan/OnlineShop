@@ -80,7 +80,7 @@ const AddProducts = () => {
   };
 
   return (
-    <div className="min-h-screen p-10 w-[80%] text-[#816F68] font-sans">
+    <div className="min-h-screen p-10 w-[80%] text-[#1C1C1C] font-sans">
       <div className="max-w-xl mx-auto bg-white p-8 rounded-2xl shadow-lg">
         <h2 className="text-3xl font-bold mb-6 text-[#8D7471]">
           Add a New Product

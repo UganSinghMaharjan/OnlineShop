@@ -1,27 +1,28 @@
-@import url('https://fonts.googleapis.com/css2?family=Archivo:ital,wght@0,100..900;1,100..900&family=Poetsen+One&display=swap');
+@import url("https://fonts.googleapis.com/css2?family=Archivo:ital,wght@0,100..900;1,100..900&family=Poetsen+One&display=swap");
 @import "tailwindcss";
 
-
-@layer base{
-html{
+@layer base {
+  html {
     font-family: "Archivo", sans-serif;
-}}
+  }
+}
 
 @keyframes glow {
-    0%, 100% {
-      text-shadow: 0 0 5px #fff, 0 0 10px #554e26, 0 0 20px #807957;
-    }
-    50% {
-      text-shadow: 0 0 20px #fff, 0 0 30px #ca4848, 0 0 40px #f86226;
-    }
+  0%,
+  100% {
+    text-shadow: 0 0 5px #fff, 0 0 10px #554e26, 0 0 20px #807957;
   }
-  
-  .animate-glow {
-    animation: glow 5s infinite ease-in-out;
+  50% {
+    text-shadow: 0 0 20px #fff, 0 0 30px #ca4848, 0 0 40px #f86226;
   }
-  
-  /* #816F68
+}
+
+.animate-glow {
+  animation: glow 5s infinite ease-in-out;
+}
+
+/* #1C1C1C
   #8D7471
   #9F838C
-  #BAABBD
+  #795548
   #C9C9EE */

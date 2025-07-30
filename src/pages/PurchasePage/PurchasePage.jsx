@@ -196,7 +196,7 @@ const PurchasePage = () => {
                       {product.productName}
                     </h4>
                     <p className="text-gray-500 text-sm">{product.brandName}</p>
-                    <p className="text-black font-bold mt-1">
+                    <p className="text-white font-bold mt-1">
                       Rs.{product.productPrice}
                     </p>
                   </div>
