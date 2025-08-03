@@ -15,6 +15,16 @@ const PurchasePage = () => {
   const [quantity, setQuantity] = useState(1);
   const [currentId, setCurrentId] = useState(paramId); // track current product id
 
+  // Helper to ensure unique products by _id
+  const uniqueById = (arr) => {
+    const seen = new Set();
+    return arr.filter((item) => {
+      if (seen.has(item._id)) return false;
+      seen.add(item._id);
+      return true;
+    });
+  };
+
   // Fetch single product by currentId
   useEffect(() => {
     const getProductById = async () => {
@@ -38,7 +48,7 @@ const PurchasePage = () => {
     const fetchProducts = async () => {
       try {
         const res = await API.get("http://localhost:5000/api/v1/all/products");
-        setProducts(res.data.data);
+        setProducts(uniqueById(res.data.data)); // ensure uniqueness on initial load
       } catch (error) {
         console.error("Failed to fetch products:", error);
         toast.error("Error loading other products.");
@@ -87,20 +97,30 @@ const PurchasePage = () => {
     }
   };
 
-  // When clicking a product card, swap it with the main product
+  // Swap clicked product with main product, ensuring unique products list
   const handleProductSwap = (clickedProduct) => {
     if (!singleProduct) return;
 
-    const filteredProducts = products.filter(
-      (p) => p._id !== clickedProduct._id
-    );
-    const newProducts = [...filteredProducts, singleProduct];
+    // Remove clicked product from products
+    let filteredProducts = products.filter((p) => p._id !== clickedProduct._id);
 
+    // Add previous main product back
+    filteredProducts.push(singleProduct);
+
+    // Remove duplicates by _id
+    const newProducts = uniqueById(filteredProducts);
+
+    // Update states
     setProducts(newProducts);
     setSingleProduct(clickedProduct);
     setQuantity(1);
     setCurrentId(clickedProduct._id);
   };
+
+  // Prepare unique filtered products for rendering other products
+  const filteredUniqueProducts = uniqueById(products).filter(
+    (prod) => prod._id !== currentId
+  );
 
   return (
     <>
@@ -175,32 +195,30 @@ const PurchasePage = () => {
         </div>
 
         {/* Other Products Section */}
-        {products.length > 0 && (
+        {filteredUniqueProducts.length > 0 && (
           <div className="mt-12">
             <h3 className="text-2xl font-bold mb-4">Other Products</h3>
             <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
-              {products
-                .filter((prod) => prod._id !== currentId)
-                .map((product) => (
-                  <div
-                    key={product._id}
-                    onClick={() => handleProductSwap(product)}
-                    className="bg-white p-4 rounded-xl shadow-md flex flex-col items-center text-center cursor-pointer hover:shadow-lg transition transform hover:-translate-y-1 hover:scale-105"
-                  >
-                    <img
-                      src={`http://localhost:5000/uploads/${product.productImage}`}
-                      alt={product.productName}
-                      className="w-full h-48 object-cover rounded-lg mb-2"
-                    />
-                    <h4 className="font-semibold text-lg">
-                      {product.productName}
-                    </h4>
-                    <p className="text-gray-500 text-sm">{product.brandName}</p>
-                    <p className="text-white font-bold mt-1">
-                      Rs.{product.productPrice}
-                    </p>
-                  </div>
-                ))}
+              {filteredUniqueProducts.map((product) => (
+                <div
+                  key={product._id}
+                  onClick={() => handleProductSwap(product)}
+                  className="bg-white p-4 rounded-xl shadow-md flex flex-col items-center text-center cursor-pointer hover:shadow-lg transition transform hover:-translate-y-1 hover:scale-105"
+                >
+                  <img
+                    src={`http://localhost:5000/uploads/${product.productImage}`}
+                    alt={product.productName}
+                    className="w-full h-48 object-cover rounded-lg mb-2"
+                  />
+                  <h4 className="font-semibold text-lg">
+                    {product.productName}
+                  </h4>
+                  <p className="text-gray-500 text-sm">{product.brandName}</p>
+                  <p className="text-white font-bold mt-1">
+                    Rs.{product.productPrice}
+                  </p>
+                </div>
+              ))}
             </div>
           </div>
         )}
