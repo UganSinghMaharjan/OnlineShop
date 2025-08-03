@@ -25,7 +25,7 @@ const headerHeight = 64;
 
 const Admin = () => {
   const location = useLocation();
-  const navigate = useNavigate();
+  const _navigate = useNavigate();
   const dispatch = useDispatch();
 
   const defaultSelectedKey = location.state?.selectedKey || "1";
