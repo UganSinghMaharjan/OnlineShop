@@ -1,6 +1,7 @@
 import React, { useEffect, useState, useRef } from "react";
 import axios from "axios";
 import { useAnimation } from "framer-motion";
+import { motion as Motion } from "framer-motion";
 
 const HomeAni = () => {
   const [products, setProducts] = useState([]);
@@ -25,7 +26,7 @@ const HomeAni = () => {
   useEffect(() => {
     if (products.length === 0) return;
 
-    const carouselWidth = carouselRef.current.scrollWidth / 2; // because duplicated
+    const carouselWidth = carouselRef.current.scrollWidth / 2; // duplicated width for smooth loop
 
     controls.start({
       x: [0, -carouselWidth],
@@ -57,10 +58,15 @@ const HomeAni = () => {
       </h2>
 
       <div className="relative w-full max-w-7xl overflow-hidden">
-        <motion.div ref={carouselRef} animate={controls} className="flex w-max">
+        <Motion.div
+          ref={carouselRef}
+          animate={controls}
+          className="flex w-max"
+          aria-label="Product carousel"
+        >
           {duplicatedProducts.map((product, i) => (
-            <motion.div
-              key={product._id + "-" + i}
+            <Motion.div
+              key={`${product._id}-${i}`}
               whileHover={{ scale: 1.1 }}
               className="flex-shrink-0 w-56 h-56 m-4 rounded-lg overflow-hidden shadow-lg"
               title={product.productName}
@@ -70,9 +76,9 @@ const HomeAni = () => {
                 alt={product.productName}
                 className="w-full h-full object-cover"
               />
-            </motion.div>
+            </Motion.div>
           ))}
-        </motion.div>
+        </Motion.div>
       </div>
     </>
   );
