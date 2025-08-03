@@ -45,7 +45,7 @@ const Cart = () => {
 
   const handleCheckout = async () => {
     try {
-      const res = await API.post(
+      await API.post(
         "http://localhost:5000/api/v1/add-to-order",
         { userId },
         {

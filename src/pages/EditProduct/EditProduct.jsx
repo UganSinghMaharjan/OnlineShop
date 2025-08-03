@@ -30,7 +30,7 @@ const EditProduct = () => {
           `http://localhost:5000/uploads/${response.data.data.productImage}`
         );
       } catch (error) {
-        setMessage("Error fetching product details");
+        setMessage("Error fetching product details", error);
       }
     };
 
@@ -77,7 +77,7 @@ const EditProduct = () => {
     setMessage("");
 
     try {
-      const res = await axios.put(
+      await axios.put(
         `http://localhost:5000/api/v1/edit/product/${id}`,
         formData,
         {
@@ -94,7 +94,7 @@ const EditProduct = () => {
       navigate("/admin", { state: { selectedKey: "4" } });
     } catch (error) {
       // Error message
-      setMessage("❌ Failed to update product.");
+      setMessage("❌ Failed to update product.", error);
     } finally {
       setIsLoading(false);
     }

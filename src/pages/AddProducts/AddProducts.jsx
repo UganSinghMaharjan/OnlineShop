@@ -51,15 +51,11 @@ const AddProducts = () => {
     setMessage("");
 
     try {
-      const res = await axios.post(
-        "http://localhost:5000/api/v1/add/product",
-        formData,
-        {
-          headers: {
-            "Content-Type": "multipart/form-data",
-          },
-        }
-      );
+      await axios.post("http://localhost:5000/api/v1/add/product", formData, {
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
+      });
 
       setMessage("🎉 Product added successfully!");
       setProductValue({
