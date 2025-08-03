@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useCallback } from "react";
 import Header from "../../components/Header/Header";
 import Footer from "../../components/Footer/Footer";
 import { toast } from "react-toastify";
@@ -7,54 +7,98 @@ import API from "../../redux/api/api";
 const Cart = () => {
   const [cartItems, setCartItems] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [updatingId, setUpdatingId] = useState(null);
   const [confirmingCheckout, setConfirmingCheckout] = useState(false);
 
   const user = JSON.parse(localStorage.getItem("user"));
   const token = localStorage.getItem("token");
   const userId = user?._id;
 
-  useEffect(() => {
-    const fetchCart = async () => {
-      try {
-        const res = await API.get(
-          `http://localhost:5000/api/v1/get-my-cart/${userId}`
-        );
-        const items = res.data.data.items.map((item) => ({
-          id: item.productId._id,
-          name: item.productId.productName,
-          price: item.productId.productPrice,
-          quantity: item.quantity,
-          image: `http://localhost:5000/uploads/${item.productId.productImage}`,
-        }));
-        setCartItems(items);
-      } catch (error) {
-        console.error("Failed to load cart:", error);
-        toast.error("Could not load cart. Try again later.");
-      } finally {
-        setLoading(false);
-      }
-    };
+  // fetchCart wrapped in useCallback with dependencies
+  const fetchCart = useCallback(async () => {
+    setLoading(true);
+    try {
+      const res = await API.get(
+        `http://localhost:5000/api/v1/get-my-cart/${userId}`,
+        {
+          headers: { Authorization: `Bearer ${token}` },
+        }
+      );
+      const items = res.data.data.items.map((item) => ({
+        id: item.productId._id,
+        name: item.productId.productName,
+        price: item.productId.productPrice,
+        quantity: item.quantity,
+        image: `http://localhost:5000/uploads/${item.productId.productImage}`,
+      }));
+      setCartItems(items);
+    } catch (error) {
+      console.error("Failed to load cart:", error);
+      toast.error("Could not load cart. Try again later.");
+    } finally {
+      setLoading(false);
+    }
+  }, [userId, token]);
 
+  useEffect(() => {
     if (userId) fetchCart();
-  }, [userId]);
+  }, [fetchCart, userId]);
 
   const total = cartItems.reduce(
     (acc, item) => acc + item.price * item.quantity,
     0
   );
 
-  const handleCheckout = async () => {
+  const handleChangeQuantity = async (productId, change) => {
+    if (updatingId) return;
+    setUpdatingId(productId);
     try {
-      const res = await API.post(
-        "http://localhost:5000/api/v1/add-to-order",
-        { userId },
+      await API.put(
+        `http://localhost:5000/api/v1/cart/${userId}/item/${productId}`,
+        { change },
         {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
+          headers: { Authorization: `Bearer ${token}` },
         }
       );
+      await fetchCart();
+      toast.success("Cart updated.");
+    } catch (error) {
+      console.error("Failed to update quantity:", error);
+      toast.error(
+        error.response?.data?.message || "Failed to update quantity."
+      );
+    } finally {
+      setUpdatingId(null);
+    }
+  };
 
+  const handleRemoveItem = async (productId) => {
+    if (updatingId) return;
+    setUpdatingId(productId);
+    try {
+      await API.delete(
+        `http://localhost:5000/api/v1/cart/${userId}/item/${productId}`,
+        {
+          headers: { Authorization: `Bearer ${token}` },
+        }
+      );
+      await fetchCart();
+      toast.success("Item removed from cart.");
+    } catch (error) {
+      console.error("Failed to remove item:", error);
+      toast.error("Could not remove item. Try again.");
+    } finally {
+      setUpdatingId(null);
+    }
+  };
+
+  const handleCheckout = async () => {
+    try {
+      await API.post(
+        "http://localhost:5000/api/v1/add-to-order",
+        { userId },
+        { headers: { Authorization: `Bearer ${token}` } }
+      );
       toast.success("Order placed successfully!");
       setCartItems([]);
       setConfirmingCheckout(false);
@@ -63,40 +107,11 @@ const Cart = () => {
       toast.error("Failed to place order. Try again.");
     }
   };
-  const handleRemoveItem = async (productId) => {
-    try {
-      await API.delete(
-        `http://localhost:5000/api/v1/cart/${userId}/item/${productId}`,
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        }
-      );
-
-      toast.success("Item removed from cart.");
-      setCartItems((prevItems) =>
-        prevItems.filter((item) => item.id !== productId)
-      );
-    } catch (error) {
-      console.error("Failed to remove item:", error);
-      toast.error("Could not remove item. Try again.");
-    }
-  };
-
-  const handleConfirmClick = () => {
-    setConfirmingCheckout(true);
-  };
-
-  const handleCancel = () => {
-    setConfirmingCheckout(false);
-  };
 
   return (
     <div className="min-h-screen flex flex-col justify-between bg-[#BAABBD] text-[#816F68] font-sans relative">
       <Header />
 
-      {/* Hero Section */}
       <div className="text-center py-16 px-4 bg-[#C9C9EE] shadow-md shadow-[#816F68]/20">
         <h1 className="text-5xl font-extrabold text-[#8D7471] mb-4">
           Your Cart
@@ -106,7 +121,6 @@ const Cart = () => {
         </p>
       </div>
 
-      {/* Cart Items */}
       <div className="w-11/12 md:w-4/5 mx-auto py-12 grid gap-6">
         {loading ? (
           <p className="text-center">Loading cart...</p>
@@ -136,17 +150,42 @@ const Cart = () => {
                   </p>
                 </div>
               </div>
-              <button
-                onClick={() => handleRemoveItem(item.id)}
-                className="px-4 py-2 bg-red-100 text-red-600 rounded-xl hover:bg-red-200 transition"
-              >
-                Remove
-              </button>
+
+              <div className="flex flex-col items-end gap-2">
+                <div className="flex items-center gap-2">
+                  <button
+                    onClick={() => handleChangeQuantity(item.id, 1)}
+                    className="px-3 py-1 bg-green-100 text-green-700 rounded-lg hover:bg-green-200"
+                    disabled={updatingId === item.id}
+                    title="Add 1"
+                  >
+                    +
+                  </button>
+                  <button
+                    onClick={() => handleChangeQuantity(item.id, -1)}
+                    className="px-3 py-1 bg-yellow-100 text-yellow-700 rounded-lg hover:bg-yellow-200"
+                    disabled={item.quantity <= 1 || updatingId === item.id}
+                    title={
+                      item.quantity <= 1
+                        ? "Use Remove to delete item"
+                        : "Remove 1"
+                    }
+                  >
+                    −
+                  </button>
+                </div>
+                <button
+                  onClick={() => handleRemoveItem(item.id)}
+                  className="px-3 py-1 bg-red-100 text-red-600 rounded-lg hover:bg-red-200"
+                  disabled={updatingId === item.id}
+                >
+                  Remove All
+                </button>
+              </div>
             </div>
           ))
         )}
 
-        {/* Total Section */}
         {!loading && cartItems.length > 0 && (
           <div className="border border-gray-200 rounded-xl p-5 text-right bg-gray-50">
             <div className="text-sm text-gray-500 mb-1">Order Total</div>
@@ -154,7 +193,7 @@ const Cart = () => {
               Rs. {total.toFixed(2)}
             </h2>
             <button
-              onClick={handleConfirmClick}
+              onClick={() => setConfirmingCheckout(true)}
               className="mt-3 px-5 py-2 bg-black text-white rounded-lg text-sm hover:bg-gray-800 transition"
             >
               Checkout
@@ -163,7 +202,6 @@ const Cart = () => {
         )}
       </div>
 
-      {/* Confirmation Modal */}
       {confirmingCheckout && (
         <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
           <div className="bg-white p-6 rounded-2xl shadow-xl text-center space-y-4 w-80">
@@ -175,7 +213,7 @@ const Cart = () => {
             </p>
             <div className="flex justify-center gap-4 mt-4">
               <button
-                onClick={handleCancel}
+                onClick={() => setConfirmingCheckout(false)}
                 className="px-4 py-2 rounded-md border border-gray-300 text-gray-600 hover:bg-gray-100 transition"
               >
                 Cancel

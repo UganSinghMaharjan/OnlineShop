@@ -1,6 +1,6 @@
 import React, { useEffect, useState, useRef } from "react";
 import axios from "axios";
-import { motion, useAnimation } from "framer-motion";
+import { useAnimation } from "framer-motion";
 
 const HomeAni = () => {
   const [products, setProducts] = useState([]);

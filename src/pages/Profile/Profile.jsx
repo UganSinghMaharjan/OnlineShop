@@ -18,7 +18,7 @@ import Header from "../../components/Header/Header";
 const { Title, Text, Paragraph } = Typography;
 
 const Profile = () => {
-  const { isAuthenticated, user } = useSelector((state) => state.auth);
+  const { user } = useSelector((state) => state.auth);
 
   const [orders, setOrders] = useState([]);
   const [loadingOrders, setLoadingOrders] = useState(true);
@@ -39,7 +39,7 @@ const Profile = () => {
         );
         setOrders(res.data.orders || []);
       } catch (err) {
-        setOrderError("Could not load your orders.");
+        setOrderError("Could not load your orders.", err);
       } finally {
         setLoadingOrders(false);
       }
