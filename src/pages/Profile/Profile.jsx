@@ -39,7 +39,7 @@ const Profile = () => {
         );
         setOrders(res.data.orders || []);
       } catch (err) {
-        setOrderError("Could not load your orders.", err);
+        setOrderError("No Order Placed.", err);
       } finally {
         setLoadingOrders(false);
       }
